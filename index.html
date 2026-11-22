@@ -13,9 +13,12 @@ h1{font-size:18px;margin:4px 0 10px}
 h2{font-size:14px;color:var(--mu);font-weight:500;margin:0}
 #banner{display:block;width:100%;aspect-ratio:3/1;object-fit:cover;border-radius:14px;margin-bottom:10px}
 .card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px;margin-bottom:12px}
-.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.tabs button{flex:1 1 auto;padding:8px 6px;border-radius:12px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit;font-size:14px}
+.tabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.tabs button{flex:1 1 auto;padding:9px 6px;border-radius:12px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit;font-size:14px}
 .tabs button.on{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.subtabs button{flex:1 1 auto;padding:6px 4px;border-radius:10px;border:1px solid var(--ln);background:none;color:var(--mu);font:inherit;font-size:13px}
+.subtabs button.on{color:var(--ac);border-color:var(--ac);font-weight:600}
 button{font:inherit;cursor:pointer}
 .b{padding:9px 14px;border-radius:10px;border:1px solid var(--ac);background:none;color:var(--ac)}
 .p{background:var(--ac);color:var(--bg)}
@@ -49,7 +52,8 @@ label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
 </style></head>
 <body><main>
 <h1>廢柴男子．接案與製香帳務</h1>
-<div class="tabs" id="tabs"><button data-t="jobs">接案</button><button data-t="sales">製香銷售</button><button data-t="prod">商品</button><button data-t="mats">材料</button><button data-t="chan">通路</button><button data-t="set">設定</button></div>
+<div class="tabs" id="gtabs"><button data-g="jobs">廢柴男子接案工作室</button><button data-g="shop">芳巽堂</button><button data-g="set">設定</button></div>
+<div class="subtabs" id="subtabs" hidden></div>
 
 <section id="setp" hidden>
  <div class="card">
@@ -106,6 +110,8 @@ const DEFCH=['市集','網路','一般購買','寄賣'];
 const CTYPES=['市集','網路','寄賣','其他'];
 const SHEETS={jobs:'接案',sales:'銷售',prod:'商品',mats:'材料',chan:'通路'};
 const NATIVE=['jobs','sales','mats','prod','chan'];
+const GROUPS={shop:[['sales','製香銷售'],['prod','商品'],['mats','材料'],['chan','通路']]};
+const groupOf=t=>t==='jobs'?'jobs':t==='set'?'set':'shop';
 const HINT={jobs:'一行一案，例：蔡志舜 稿費6500 已入帳\n可加：車資800 餐費340 工作日6/10 客戶Doiiin',
             sales:'一行一場，例：11/25 西門紅樓 幽谷馥3 單價350 初光1 單價325 車資40 餐費165\n可加：收入1650、抽30（抽成%）、寄賣、市集、網路',
             mats:'一行一筆進貨，例：11/19 沉香粉 600克 500元 承樂製香廠\n包材例：11/20 壓克力線香盒 100個 2800元 淘寶',
@@ -316,8 +322,13 @@ const ji=r=>({k:'jobs',i:D.jobs.indexOf(r),n:r.case,s:(r.client||'')+' · '+(r.s
 const si=(r,a)=>({k:'sales',i:D.sales.indexOf(r),n:r.market,s:(r.date||'')+' · '+(r.channel||''),a});
 
 /* ---------- 畫面 ---------- */
+function setTab(t){tab=t;pend=[];drawPv();$('#msg').textContent='';render();if(tab!=='set')loadAll()}
 function render(){
- document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+ const g=groupOf(tab);
+ document.querySelectorAll('#gtabs button').forEach(b=>b.classList.toggle('on',b.dataset.g===g));
+ const sub=GROUPS[g]||[];
+ $('#subtabs').hidden=!sub.length;
+ $('#subtabs').innerHTML=sub.map(([t,l])=>`<button data-t="${t}" class="${t===tab?'on':''}">${l}</button>`).join('');
  $('#setp').hidden=tab!=='set';$('#mainp').hidden=tab==='set';
  const bn=$('#banner'),src=tab==='jobs'?'jobs.gif':tab==='set'?'':'sales.gif';
  if(!src)bn.hidden=true;else{bn.hidden=false;if(bn.getAttribute('src')!==src)bn.setAttribute('src',src)}
@@ -491,7 +502,10 @@ async function delForm(){
 }
 
 /* ---------- 事件 ---------- */
-document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;pend=[];drawPv();$('#msg').textContent='';render();if(tab!=='set')loadAll()});
+$('#gtabs').onclick=e=>{const g=e.target.dataset.g;if(!g)return;
+ if(g==='shop')setTab(groupOf(tab)==='shop'?tab:'sales');
+ else setTab(g)};
+$('#subtabs').onclick=e=>{const t=e.target.dataset.t;if(t)setTab(t)};
 $('#add').onclick=()=>{if(NATIVE.includes(tab))$('#inp').focus();else if(FORMS[tab])openForm(tab,null)};
 $('#fadd').onclick=()=>{if(FORMS[tab])openForm(tab,null)};
 $('#parse').onclick=()=>{if($('#inp').value.trim())build()};
