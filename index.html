@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>廢柴男子．接案與製香帳務</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--tx:#2b2620;--mu:#8a8076;--ln:#e8e1d6;--ac:#7a5c3e;--ok:#4f8a5b;--wa:#c98a2b;--bad:#b4533f;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1815;--card:#26221e;--tx:#efe8dd;--mu:#a1978b;--ln:#3a342d;--ac:#d1a877;--ok:#7fc08c;--wa:#e0aa55;--bad:#e08a75;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{max-width:720px;margin:0 auto;padding:14px}
+h1{font-size:18px;margin:4px 0 10px}
+h2{font-size:14px;color:var(--mu);font-weight:500;margin:0}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px;margin-bottom:12px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tabs button{flex:1;padding:9px;border-radius:12px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit}
+.tabs button.on{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+button{font:inherit;cursor:pointer}
+.b{padding:9px 14px;border-radius:10px;border:1px solid var(--ac);background:none;color:var(--ac)}
+.p{background:var(--ac);color:var(--bg)}
+button:disabled{opacity:.5}
+textarea,input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:8px;width:100%}
+label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
+.btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.mu{color:var(--mu);font-size:13px}
+.warn{color:var(--wa);font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.st{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:10px}
+.st b{display:block;font-size:17px}
+.row{padding:10px 0;border-top:1px solid var(--ln);cursor:pointer}
+.row:first-child{border-top:0}
+.pv{border:1px dashed var(--ac);border-radius:10px;padding:8px;margin:8px 0;font-size:14px}
+.tag{font-size:11px;border:1px solid var(--ln);border-radius:6px;padding:0 5px;margin-left:4px;color:var(--mu)}
+.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+#md{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:9}
+#mb{background:var(--card);width:100%;max-width:560px;max-height:90%;overflow:auto;border-radius:16px 16px 0 0;padding:14px calc(14px + env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px))}
+</style></head>
+<body><main>
+<h1>廢柴男子．接案與製香帳務</h1>
+<div class="tabs"><button data-t="jobs">接案</button><button data-t="sales">製香銷售</button><button data-t="set">設定</button></div>
+
+<section id="setp" hidden>
+ <div class="card">
+  <h2>連線設定（只存在這台裝置的瀏覽器，不會放進程式）</h2>
+  <label>Apps Script 網址</label><input id="url" placeholder="https://script.google.com/macros/s/…/exec">
+  <label>金鑰</label><input id="key" type="password">
+  <div class="btns"><button class="b p" id="save">儲存設定</button><button class="b" id="ping">測試連線</button><button class="b" id="tw">測試寫入</button></div>
+  <div id="smsg" class="mu"></div>
+ </div>
+</section>
+
+<section id="mainp">
+ <div class="card">
+  <textarea id="inp" rows="3"></textarea>
+  <div class="btns"><button class="b" id="mic">🎤 語音</button><button class="b p" id="parse">整理</button></div>
+  <div id="pv"></div>
+ </div>
+ <div class="grid" id="stats"></div>
+ <div class="card">
+  <div class="hd"><h2 id="lt">紀錄</h2><button class="b" id="refresh">重新讀取</button></div>
+  <div id="list"></div>
+  <div id="msg" class="mu"></div>
+ </div>
+</section>
+</main>
+<div id="md" hidden><div id="mb"></div></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const N=v=>Number(v)||0;
+const nt=n=>'NT$'+Math.round(N(n)).toLocaleString();
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const ST=['進行中','已完稿','已請款','已入帳'];
+const CH=['市集','網路','一般購買','寄賣'];
+const HINT={jobs:'一行一案，例：蔡志舜 稿費6500 已入帳\n可加：車資800 餐費340 工作日6/10 客戶Doiiin',
+            sales:'一行一場，例：11/25 西門紅樓 幽谷馥3 單價350 初光1 單價325 車資40 餐費165\n可加：收入1650、抽30（抽成%）、寄賣、市集、網路'};
+let cfg=JSON.parse(localStorage.getItem('ledgerCfg')||'{}');
+let D={jobs:[],sales:[]},tab=cfg.url?'jobs':'set',pend=[],ed=null;
+
+/* ---------- 連線 Apps Script ---------- */
+const errMsg=e=>({key:'金鑰不對',nosheet:'找不到工作表，請確認分頁名稱是「接案」「銷售」',notfound:'找不到這筆紀錄（可能已被刪除）',action:'指令錯誤'})[e]||e||'未知錯誤';
+function need(){if(!cfg.url||!cfg.key)throw new Error('請先到「設定」填入網址與金鑰')}
+function fromRow(sheet,r){if(sheet==='銷售')r.items=textToItems(r.items);return r}
+async function get(sheet){need();const u=new URL(cfg.url);u.searchParams.set('key',cfg.key);u.searchParams.set('sheet',sheet);
+ const j=await (await fetch(u)).json();if(!j.ok)throw new Error(errMsg(j.error));return j.rows.map(r=>fromRow(sheet,r))}
+async function send(sheet,action,body){need();
+ const r=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({key:cfg.key,sheet,action},body))});
+ const j=await r.json();if(!j.ok)throw new Error(errMsg(j.error));return j}
+async function loadAll(){
+ if(!cfg.url){$('#msg').textContent='請先到「設定」填入網址與金鑰';return}
+ try{D.jobs=await get('接案');D.sales=await get('銷售');render();$('#msg').textContent='已讀取（'+new Date().toLocaleTimeString()+'）'}
+ catch(e){$('#msg').textContent='讀取失敗：'+e.message}
+}
+
+/* ---------- 規則解析（免費，不用 AI） ---------- */
+const itemsToText=a=>(a||[]).map(i=>i.name+N(i.qty||1)+(N(i.price)?'@'+N(i.price):'')).join(' ');
+const textToItems=t=>String(t??'').split(/\s+/).filter(Boolean).map(x=>{const m=x.match(/^(.+?)(\d+)(?:@(\d+))?$/);return m?{name:m[1],qty:+m[2],price:m[3]?+m[3]:0}:null}).filter(Boolean);
+const dateTok=t=>{const m=t.match(/^(\d{1,2})[\/月](\d{1,2})日?$/);if(!m)return null;return new Date().getFullYear()+'-'+m[1].padStart(2,'0')+'-'+m[2].padStart(2,'0')};
+const money=(t,k)=>{if(!t.startsWith(k)||!/^\d+$/.test(t.slice(k.length)))return null;return +t.slice(k.length)};
+const SKW={車資:'fare',餐費:'meal',攤位費:'stall',攤位:'stall',住宿:'lodging',雜支:'other',總收入:'manualIncome',收入:'manualIncome'};
+const JKW={稿費:'fee',車資:'fare',餐費:'meal'};
+function parseSales(line){
+ let toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return null;
+ const f={items:[]},warn=[];
+ toks=toks.filter(t=>{const d=dateTok(t);if(d){f.date=d;return false}return true});
+ if(!toks.length)return null;
+ f.market=toks[0];let last=null;
+ for(const t of toks.slice(1)){
+  let k;
+  if((k=t.match(/^單價(\d+)$/))){if(last)last.price=+k[1];else warn.push('「單價」前面沒有商品');continue}
+  const kw=Object.keys(SKW).find(x=>money(t,x)!==null);
+  if(kw){f[SKW[kw]]=money(t,kw);continue}
+  if(CH.includes(t)){f.channel=t;if(t==='寄賣')f.settle='事後結算';continue}
+  if((k=t.match(/^抽(\d+)%?$/))){f.commission=+k[1];continue}
+  if((k=t.match(/^(.+?)(\d+)(?:@(\d+))?$/))){last={name:k[1],qty:+k[2],price:k[3]?+k[3]:0};f.items.push(last);continue}
+  warn.push('看不懂：'+t);
+ }
+ return {f,warn};
+}
+function parseJob(line){
+ const toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return null;
+ const f={case:toks[0]},warn=[];
+ for(const t of toks.slice(1)){
+  if(ST.includes(t)){f.status=t;continue}
+  const jk=Object.keys(JKW).find(x=>money(t,x)!==null);
+  if(jk){f[JKW[jk]]=money(t,jk);continue}
+  let c=t.match(/^客戶(.+)$/);if(c){f.client=c[1];continue}
+  const d=dateTok(t);if(d){f.workDate=d;continue}
+  warn.push('看不懂：'+t);
+ }
+ const old=D.jobs.find(j=>j.case===f.case);
+ if(f.status==='已入帳'&&!(old&&old.paidDate))f.paidDate=today();
+ if(f.status==='已請款'&&!(old&&old.invoiceDate))f.invoiceDate=today();
+ if(!old){f.status=f.status||'進行中';f.workDate=f.workDate||today();f.draft='正式'}
+ return {f,warn,old};
+}
+function build(){
+ const lines=$('#inp').value.split('\n').map(s=>s.trim()).filter(Boolean);
+ const lastS=D.sales.filter(r=>r.draft!=='草稿').sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];
+ pend=lines.map(l=>{
+  if(tab==='jobs'){
+   const p=parseJob(l);if(!p)return null;
+   return {sheet:'接案',op:p.old?'update':'add',id:p.old&&p.old.id,f:p.f,warn:p.warn}
+  }
+  const p=parseSales(l);if(!p)return null;
+  const f=p.f,warn=p.warn;
+  if(lastS){['channel','settle','commission','stall','fare'].forEach(k=>{
+   if(f[k]===undefined&&lastS[k]!==undefined&&lastS[k]!==''){f[k]=lastS[k];warn.push('沿用上一場：'+k+' '+lastS[k])}})}
+  f.settle=f.settle||'當場收款';f.commission=f.commission??0;f.channel=f.channel||'市集';f.date=f.date||today();f.draft='正式';
+  if(f.settle==='當場收款')f.paidDate=f.date;
+  if(!f.items.length&&!f.manualIncome)warn.push('沒有品項也沒有總收入');
+  f.items.forEach(i=>{if(!i.price)warn.push(i.name+' 未填單價')});
+  if(D.sales.some(s=>s.draft!=='草稿'&&s.market===f.market&&s.date===f.date))warn.push('同一天同場次已有紀錄，請確認不是重複');
+  return {sheet:'銷售',op:'add',f,warn}
+ }).filter(Boolean);
+ drawPv();
+}
+function drawPv(){
+ if(!pend.length){$('#pv').innerHTML='';return}
+ $('#pv').innerHTML=pend.map(p=>{const f=p.f;
+  const txt=p.sheet==='接案'
+   ?[f.case,f.client,f.status,f.fee?nt(f.fee):'',f.workDate?'工作 '+f.workDate:'',f.paidDate?'入帳 '+f.paidDate:'',f.fare?'車資 '+f.fare:'',f.meal?'餐費 '+f.meal:''].filter(Boolean).join(' · ')
+   :[f.date,f.market,f.channel,f.settle,(f.items||[]).map(x=>x.name+'×'+x.qty+(x.price?'@'+x.price:'')).join('、'),f.manualIncome?'總收入 '+nt(f.manualIncome):'',f.stall?'攤位 '+nt(f.stall):'',f.fare?'車資 '+nt(f.fare):'',f.meal?'餐費 '+nt(f.meal):''].filter(Boolean).join(' · ');
+  return `<div class="pv"><b>${p.op==='update'?'更新':'新增'}${p.sheet}</b>　${esc(txt)}${p.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`}).join('')
+  +`<div class="btns"><button class="b" id="cancel">取消</button><button class="b" id="draft">存成草稿</button><button class="b p" id="confirm">確認儲存</button></div>`;
+}
+const toRow=(sheet,f,draft)=>{const o=Object.assign({},f);delete o.id;delete o.op;if(sheet==='銷售'){o.items=itemsToText(f.items)}if(draft)o.draft='草稿';return o};
+async function saveAll(draft){
+ $('#msg').textContent='儲存中…';
+ try{
+  for(const p of pend){const body=toRow(p.sheet,p.f,draft);
+   if(p.op==='update')await send(p.sheet,'update',{id:p.id,data:body});
+   else await send(p.sheet,'add',{data:body})}
+  $('#msg').textContent='已儲存 '+pend.length+' 筆';pend=[];$('#inp').value='';drawPv();await loadAll();
+ }catch(e){$('#msg').textContent='儲存失敗：'+e.message}
+}
+
+/* ---------- 統計與列表 ---------- */
+const inc=s=>(s.items&&s.items.length)?s.items.reduce((a,i)=>a+N(i.qty||1)*N(i.price),0):N(s.manualIncome);
+const exp=s=>N(s.stall)+N(s.fare)+N(s.meal)+N(s.lodging)+N(s.other);
+const comm=s=>inc(s)*N(s.commission)/100;
+const net=s=>inc(s)-comm(s)-exp(s);
+const real=r=>r.draft!=='草稿';
+const byKey=k=>(a,b)=>(b[k]||'').localeCompare(a[k]||'');
+function render(){
+ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+ $('#setp').hidden=tab!=='set';$('#mainp').hidden=tab==='set';
+ if(tab==='set')return;
+ $('#inp').placeholder=HINT[tab];
+ if(tab==='jobs'){
+  const rows=D.jobs.slice().sort(byKey('workDate')),r0=rows.filter(real);
+  const paid=r0.filter(r=>r.status==='已入帳').reduce((a,r)=>a+N(r.fee),0),wait=r0.filter(r=>r.status!=='已入帳').reduce((a,r)=>a+N(r.fee),0);
+  $('#stats').innerHTML=[['已入帳稿費',nt(paid)],['待收款',nt(wait)],['案件數',r0.length]].map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('');
+  $('#lt').textContent='接案紀錄（點一筆可編輯）';
+  $('#list').innerHTML=rows.map(r=>`<div class="row" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<div class="mu">${esc(r.client||'')} · ${esc(r.status||'')} · 稿費 ${nt(r.fee)}${r.paidDate?' · 入帳 '+esc(r.paidDate):''}</div></div>`).join('')||'<div class="mu">尚無紀錄</div>';
+ }else{
+  const rows=D.sales.slice().sort(byKey('date')),r0=rows.filter(real);
+  const I=r0.reduce((a,r)=>a+inc(r),0),NT=r0.reduce((a,r)=>a+net(r),0);
+  $('#stats').innerHTML=[['收入',nt(I)],['淨利',nt(NT)],['場次',r0.length]].map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('');
+  $('#lt').textContent='銷售紀錄（點一筆可編輯）';
+  $('#list').innerHTML=rows.map(r=>`<div class="row" data-i="${D.sales.indexOf(r)}"><b>${esc(r.market)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<span class="tag">${esc(r.channel||'')}</span><div class="mu">${esc(r.date||'')} · 收入 ${nt(inc(r))} · 淨利 ${nt(net(r))}${(r.items||[]).length?' · '+r.items.map(i=>esc(i.name)+'×'+i.qty).join('、'):''}</div></div>`).join('')||'<div class="mu">尚無紀錄</div>';
+ }
+}
+
+/* ---------- 編輯 ---------- */
+const FJ=[['case','案件'],['client','客戶'],['status','狀態','sel',ST],['workDate','工作日','date'],['fee','稿費','num'],['invoiceDate','請款日','date'],['expectedDate','預計入帳日','date'],['paidDate','入帳日','date'],['fare','車資','num'],['meal','餐費','num'],['draft','紀錄狀態','sel',['正式','草稿']],['note','備註']];
+const FS=[['market','場次'],['date','日期','date'],['channel','通路','sel',CH],['commission','抽成%','num'],['settle','收款方式','sel',['當場收款','事後結算']],['items','品項（例：幽谷馥3@350 初光1@325）'],['manualIncome','總收入（沒有品項時才填）','num'],['stall','攤位費','num'],['fare','車資','num'],['meal','餐費','num'],['lodging','住宿','num'],['other','雜支','num'],['paidDate','入帳日','date'],['draft','紀錄狀態','sel',['正式','草稿']],['note','備註']];
+function openEdit(i){
+ const rec=D[tab][i],fs=tab==='jobs'?FJ:FS;ed={sheet:tab==='jobs'?'接案':'銷售',id:rec.id,fs};
+ $('#mb').innerHTML=`<h2 style="color:var(--tx);font-size:16px">編輯${tab==='jobs'?'接案':'銷售'}紀錄</h2>`+fs.map(([k,l,t,o])=>{
+  const v=k==='items'?itemsToText(rec.items):rec[k];
+  const h=t==='sel'?`<select data-k="${k}">${o.map(x=>`<option ${x===v?'selected':''}>${esc(x)}</option>`).join('')}</select>`
+   :`<input data-k="${k}" type="${t==='date'?'date':t==='num'?'number':'text'}" value="${esc(v??'')}">`;
+  return `<label>${l}</label>${h}`}).join('')
+  +`<div class="btns"><button class="b" id="mc">取消</button><button class="b p" id="ms">儲存修改</button></div>`;
+ $('#md').hidden=false;
+}
+async function saveEdit(){
+ const data={};
+ ed.fs.forEach(([k,l,t])=>{const v=$(`#mb [data-k="${k}"]`).value;data[k]=t==='num'?(v===''?0:+v):v});
+ try{await send(ed.sheet,'update',{id:ed.id,data});$('#md').hidden=true;await loadAll()}
+ catch(e){$('#msg').textContent='修改失敗：'+e.message}
+}
+
+/* ---------- 事件 ---------- */
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;pend=[];drawPv();$('#msg').textContent='';render();if(tab!=='set')loadAll()});
+$('#parse').onclick=()=>{if($('#inp').value.trim())build()};
+$('#pv').onclick=e=>{const id=e.target.id;
+ if(id==='cancel'){pend=[];drawPv()}
+ if(id==='confirm')saveAll(false);
+ if(id==='draft')saveAll(true)};
+$('#list').onclick=e=>{const r=e.target.closest('.row');if(r)openEdit(+r.dataset.i)};
+$('#mb').onclick=e=>{if(e.target.id==='mc')$('#md').hidden=true;if(e.target.id==='ms')saveEdit()};
+$('#md').onclick=e=>{if(e.target.id==='md')$('#md').hidden=true};
+$('#refresh').onclick=loadAll;
+$('#url').value=cfg.url||'';$('#key').value=cfg.key||'';
+$('#save').onclick=()=>{cfg={url:$('#url').value.trim(),key:$('#key').value.trim()};localStorage.setItem('ledgerCfg',JSON.stringify(cfg));$('#smsg').textContent='已儲存（只存在這台裝置）'};
+$('#ping').onclick=async()=>{try{const r=await get('接案');$('#smsg').textContent='連線成功，接案目前 '+r.length+' 筆'}catch(e){$('#smsg').textContent='連線失敗：'+e.message}};
+$('#tw').onclick=async()=>{try{await send('接案','add',{data:{case:'測試案（可刪除）',status:'進行中',workDate:today(),draft:'草稿'}});$('#smsg').textContent='已寫入一筆測試草稿，請到試算表確認後刪除';await loadAll()}catch(e){$('#smsg').textContent='寫入失敗：'+e.message}};
+(()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){$('#mic').hidden=true;return}
+ const rec=new SR();rec.lang='zh-TW';rec.interimResults=false;let on=false,base='';
+ $('#mic').onclick=()=>{if(on){rec.stop();return}base=$('#inp').value;on=true;$('#mic').textContent='聽寫中…（再按結束）';rec.start()};
+ rec.onresult=e=>{const t=[...e.results].map(r=>r[0].transcript).join('');$('#inp').value=base+(base&&!base.endsWith('\n')?'\n':'')+t};
+ rec.onend=()=>{on=false;$('#mic').textContent='🎤 語音'};
+ rec.onerror=()=>{on=false;$('#mic').textContent='🎤 語音';$('#msg').textContent='語音沒有啟動，可以直接打字'};
+})();
+render();loadAll();
+</script></body></html>
