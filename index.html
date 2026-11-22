@@ -22,11 +22,12 @@ button{font:inherit;cursor:pointer}
 button:disabled{opacity:.5}
 textarea,input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:8px;width:100%}
 label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
-.btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center}
 .mu{color:var(--mu);font-size:13px}
 .warn{color:var(--wa);font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:12px}
 .st{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:10px}
+.st.clk{cursor:pointer}
 .st b{display:block;font-size:17px}
 .row{padding:10px 0;border-top:1px solid var(--ln);cursor:pointer}
 .row:first-child{border-top:0}
@@ -34,8 +35,15 @@ label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
 .pv{border:1px dashed var(--ac);border-radius:10px;padding:8px;margin:8px 0;font-size:14px}
 .tag{font-size:11px;border:1px solid var(--ln);border-radius:6px;padding:0 5px;margin-left:4px;color:var(--mu)}
 .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap}
-#md{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:9}
-#mb{background:var(--card);width:100%;max-width:560px;max-height:90%;overflow:auto;border-radius:16px 16px 0 0;padding:14px calc(14px + env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px))}
+.rr{text-align:right;white-space:nowrap}
+.br{display:grid;grid-template-columns:64px 1fr auto;gap:8px;align-items:center;margin:6px 0;font-size:13px;cursor:pointer}
+.br.on span:first-child{font-weight:700;color:var(--ok)}
+.bx{background:var(--ln);border-radius:4px;height:10px;overflow:hidden}
+.bx i{display:block;height:100%;background:var(--ac)}
+.br.on .bx i{background:var(--ok)}
+#md,#dm{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:9}
+#dm{z-index:10}
+#mb,#dbx{background:var(--card);width:100%;max-width:560px;max-height:90%;overflow:auto;border-radius:16px 16px 0 0;padding:14px calc(14px + env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px))}
 </style></head>
 <body><main>
 <h1>廢柴男子．接案與製香帳務</h1>
@@ -49,6 +57,11 @@ label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
   <div class="btns"><button class="b p" id="save">儲存設定</button><button class="b" id="ping">測試連線</button></div>
   <div id="smsg" class="mu"></div>
  </div>
+ <div class="card">
+  <h2>備份（下載 CSV，可用 Excel 或 Google 試算表開啟）</h2>
+  <div class="btns"><button class="b" data-x="jobs">接案</button><button class="b" data-x="sales">銷售</button><button class="b" data-x="prod">商品</button><button class="b" data-x="mats">材料</button><button class="b" data-x="chan">通路</button></div>
+  <div class="mu">建議每週下載一次，存到 Google Drive。</div>
+ </div>
 </section>
 
 <section id="mainp">
@@ -58,6 +71,13 @@ label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
   <div id="pv"></div>
  </div>
  <div class="grid" id="stats"></div>
+ <div class="card" id="mcard" hidden>
+  <div class="hd"><h2 id="mt">每月</h2><span class="btns" style="margin:0"><button class="b" id="mprev">◀</button><b id="mlab" style="min-width:84px;text-align:center"></b><button class="b" id="mnext">▶</button><button class="b" id="mall">全部</button></span></div>
+  <div class="grid" id="mstats"></div>
+  <div id="mbars"></div>
+  <div class="btns"><button class="b" id="mopen">看這個月的明細</button></div>
+ </div>
+ <div class="card" id="c2c" hidden><h2 id="c2t"></h2><div id="c2" style="margin-top:6px"></div></div>
  <div class="card">
   <div class="hd"><h2 id="lt">紀錄</h2><span class="btns" style="margin:0"><button class="b" id="add">＋新增</button><button class="b" id="refresh">重新讀取</button></span></div>
   <div id="list"></div>
@@ -67,6 +87,7 @@ label{display:block;font-size:13px;color:var(--mu);margin:8px 0 2px}
 </section>
 </main>
 <div id="md" hidden><div id="mb"></div></div>
+<div id="dm" hidden><div id="dbx"></div></div>
 
 <script>
 const $=s=>document.querySelector(s);
@@ -83,6 +104,7 @@ const HINT={jobs:'一行一案，例：蔡志舜 稿費6500 已入帳\n可加：
             sales:'一行一場，例：11/25 西門紅樓 幽谷馥3 單價350 初光1 單價325 車資40 餐費165\n可加：收入1650、抽30（抽成%）、寄賣、市集、網路'};
 let cfg=JSON.parse(localStorage.getItem('ledgerCfg')||'{}');
 let D={jobs:[],sales:[],prod:[],mats:[],chan:[]},tab=cfg.url?'jobs':'set',pend=[],ed=null;
+let MS={jobs:null,sales:null},DET={};
 const CHS=()=>D.chan.length?D.chan.map(c=>c.name):DEFCH;
 
 /* ---------- 連線 ---------- */
@@ -173,6 +195,8 @@ const comm=s=>inc(s)*N(s.commission)/100;
 const net=s=>inc(s)-comm(s)-exp(s);
 const real=r=>r.draft!=='草稿';
 const byKey=k=>(a,b)=>(b[k]||'').localeCompare(a[k]||'');
+const ji=r=>({k:'jobs',i:D.jobs.indexOf(r),n:r.case,s:(r.client||'')+' · '+(r.status||'')+(r.paidDate?' · 入帳 '+r.paidDate:''),a:N(r.fee)});
+const si=(r,a)=>({k:'sales',i:D.sales.indexOf(r),n:r.market,s:(r.date||'')+' · '+(r.channel||''),a});
 
 /* ---------- 自然語言整理 ---------- */
 function build(){
@@ -228,28 +252,66 @@ function render(){
  const nat=tab==='jobs'||tab==='sales';
  $('#entry').hidden=!nat;$('#rankc').hidden=tab!=='prod';
  if(nat)$('#inp').placeholder=HINT[tab];
+ DET={};
  const c=ctx();
  if(tab==='jobs')renderJobs();
  else if(tab==='sales')renderSales(c);
  else if(tab==='prod')renderProd(c);
  else if(tab==='mats')renderMats();
  else renderChan();
+ if(nat){renderMonthly();renderGroups()}else{$('#mcard').hidden=true;$('#c2c').hidden=true}
 }
-function setStats(list){$('#stats').innerHTML=list.map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('')}
+function setStats(list){$('#stats').innerHTML=list.map(s=>`<div class="st${s[2]?' clk':''}"${s[2]?` data-dk="${s[2]}"`:''}><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('')}
 function setList(html){$('#list').innerHTML=html||'<div class="mu">尚無紀錄</div>'}
+function bars(list){const mx=Math.max(1,...list.map(x=>Math.abs(x.v)));
+ return list.map(x=>`<div class="br${x.on?' on':''}"${x.k?` data-m="${esc(x.k)}"`:''}><span>${esc(x.l)}</span><div class="bx"><i style="width:${Math.max(2,Math.abs(x.v)/mx*100)}%"></i></div><span>${x.t}</span></div>`).join('')||'<div class="mu">尚無資料</div>'}
 function renderJobs(){
  const rows=D.jobs.slice().sort(byKey('workDate')),r0=rows.filter(real);
- const paid=sum(r0.filter(r=>r.status==='已入帳'),r=>N(r.fee)),wait=sum(r0.filter(r=>r.status!=='已入帳'),r=>N(r.fee));
- setStats([['已入帳稿費',nt(paid)],['待收款',nt(wait)],['案件數',r0.length]]);
+ const paidR=r0.filter(r=>r.status==='已入帳'),waitR=r0.filter(r=>r.status!=='已入帳');
+ const paid=sum(paidR,r=>N(r.fee)),wait=sum(waitR,r=>N(r.fee));
+ DET={paid:{t:'已入帳稿費',sum:nt(paid),items:paidR.map(ji)},wait:{t:'待收款',sum:nt(wait),items:waitR.map(ji)},cnt:{t:'案件明細',sum:r0.length+' 件',items:r0.map(ji)}};
+ setStats([['已入帳稿費',nt(paid),'paid'],['待收款',nt(wait),'wait'],['案件數',r0.length,'cnt']]);
  $('#lt').textContent='接案紀錄（點一筆可編輯）';
  setList(rows.map(r=>`<div class="row" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<div class="mu">${esc(r.client||'')} · ${esc(r.status||'')} · 稿費 ${nt(r.fee)}${r.paidDate?' · 入帳 '+esc(r.paidDate):''}</div></div>`).join(''));
 }
 function renderSales(c){
  const rows=D.sales.slice().sort(byKey('date')),r0=rows.filter(real);
  const I=sum(r0,inc),NT=sum(r0,net),CG=sum(r0,s=>cogs(s,c));
- setStats([['收入',nt(I)],['淨利',nt(NT)],['商品成本',nt(CG)],['扣成本後',nt(NT-CG)],['場次',r0.length]]);
+ DET={inc:{t:'收入明細',sum:nt(I),items:r0.map(r=>si(r,inc(r)))},net:{t:'淨利明細',sum:nt(NT),items:r0.map(r=>si(r,net(r)))},cost:{t:'商品成本明細',sum:nt(CG),items:r0.filter(r=>cogs(r,c)>0).map(r=>si(r,cogs(r)))},after:{t:'扣成本後明細',sum:nt(NT-CG),items:r0.map(r=>si(r,net(r)-cogs(r)))},cnt:{t:'場次明細',sum:r0.length+' 場',items:r0.map(r=>si(r,inc(r)))}};
+ setStats([['收入',nt(I),'inc'],['淨利',nt(NT),'net'],['商品成本',nt(CG),'cost'],['扣成本後',nt(NT-CG),'after'],['場次',r0.length,'cnt']]);
  $('#lt').textContent='銷售紀錄（點一筆可編輯）';
  setList(rows.map(r=>{const g=cogs(r,c);return `<div class="row" data-k="sales" data-i="${D.sales.indexOf(r)}"><b>${esc(r.market)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<span class="tag">${esc(r.channel||'')}</span><div class="mu">${esc(r.date||'')} · 收入 ${nt(inc(r))} · 淨利 ${nt(net(r))}${g?' · 成本 '+nt(g):''}${(r.items||[]).length?' · '+r.items.map(i=>esc(canon(c,i.name))+'×'+i.qty).join('、'):''}</div></div>`}).join(''));
+}
+/* 月份：接案以入帳月為準，銷售以入帳日（事後結算需填入帳日）為準 */
+function monthsOf(){
+ const J=tab==='jobs';
+ const rows=J?D.jobs.filter(r=>real(r)&&r.status==='已入帳'):D.sales.filter(real);
+ const m={};
+ rows.forEach(r=>{const k=J?(r.paidDate||''):(r.paidDate||(r.settle==='事後結算'?'':r.date)||'');if(!k)return;const mm=k.slice(0,7);(m[mm]=m[mm]||[]).push(r)});
+ return Object.keys(m).sort().map(k=>({k,rows:m[k]}));
+}
+function renderMonthly(){
+ const J=tab==='jobs',months=monthsOf(),card=$('#mcard');
+ card.hidden=!months.length;
+ if(!months.length)return;
+ let sel=MS[tab];if(sel&&!months.some(m=>m.k===sel)){sel=null;MS[tab]=null}
+ const cur=sel?months.find(m=>m.k===sel):null,rows=cur?cur.rows:months.flatMap(m=>m.rows);
+ $('#mlab').textContent=cur?cur.k:'全部月份';
+ $('#mt').textContent=J?'每月入帳稿費（點長條或按 ◀ ▶ 切換）':'每月收入（點長條或按 ◀ ▶ 切換）';
+ $('#mstats').innerHTML=(J?[['入帳稿費',nt(sum(rows,r=>N(r.fee)))],['件數',rows.length]]:[['收入',nt(sum(rows,inc))],['淨利',nt(sum(rows,net))],['場次',rows.length]])
+  .map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('');
+ $('#mbars').innerHTML=bars(months.map(m=>{const v=J?sum(m.rows,r=>N(r.fee)):sum(m.rows,inc);return {l:m.k.slice(2),k:m.k,on:m.k===sel,v,t:nt(v)}}));
+ DET.month={t:(cur?cur.k:'全部月份')+' 明細',sum:J?nt(sum(rows,r=>N(r.fee))):nt(sum(rows,net))+' 淨利',items:rows.map(r=>J?ji(r):si(r,inc(r)))};
+}
+function stepMonth(d){const months=monthsOf();if(!months.length)return;
+ let i=months.findIndex(m=>m.k===MS[tab]);i=i<0?(d>0?-1:months.length):i;
+ i=Math.max(0,Math.min(months.length-1,i+d));MS[tab]=months[i].k;renderMonthly()}
+function renderGroups(){
+ const J=tab==='jobs',rows=J?D.jobs.filter(real):D.sales.filter(real),g={};
+ rows.forEach(r=>{const k=J?(r.client||'未填'):(r.channel||'未填');g[k]=(g[k]||0)+(J?N(r.fee):inc(r))});
+ $('#c2t').textContent=J?'各客戶稿費（含未收款）':'各通路收入';
+ $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2c').hidden=false;
 }
 function renderProd(c){
  const ds=c.ds.slice().sort((a,b)=>((a.p.cat1||'~')+(a.p.cat2||'')).localeCompare((b.p.cat1||'~')+(b.p.cat2||'')));
@@ -277,6 +339,29 @@ function renderChan(){
  setStats([['通路數',D.chan.length]]);
  $('#lt').textContent='通路（點一筆可修改抽成）';
  setList(D.chan.map(c=>`<div class="row" data-k="chan" data-i="${D.chan.indexOf(c)}"><b>${esc(c.name)}</b><span class="tag">${esc(c.type||'')}</span><div class="mu">抽成 ${N(c.commission)}% · ${esc(c.settle||'當場收款')}${c.note?' · '+esc(c.note):''}</div></div>`).join(''));
+}
+
+/* ---------- 明細視窗 ---------- */
+function openDetail(dk){
+ const d=DET[dk];if(!d)return;
+ $('#dbx').innerHTML=`<h2 style="color:var(--tx);font-size:16px">${esc(d.t)}</h2>`
+  +(d.sum!=null?`<div style="font-size:20px;font-weight:600;margin:4px 0 6px">${d.sum}</div>`:'')
+  +(d.items.length?d.items.map(x=>`<div class="row" data-k="${x.k}" data-i="${x.i}"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${esc(x.n)}</b><div class="mu">${esc(x.s)}</div></div><b class="rr">${x.a!=null?nt(x.a):''}</b></div></div>`).join(''):'<div class="mu">沒有符合的紀錄</div>')
+  +'<div class="btns"><button class="b p" id="dc">關閉</button></div>';
+ $('#dm').hidden=false;
+}
+
+/* ---------- 備份 CSV ---------- */
+function exportCSV(k){
+ const F=FORMS[k];
+ const head=['ID',...F.f.map(f=>f[1].split('（')[0])];
+ const body=D[k].map(r=>[r.id||'',...F.f.map(f=>f[0]==='items'?itemsToText(r.items):(r[f[0]]??''))]);
+ const q=v=>{const s=String(v??'');return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+ const csv='\uFEFF'+[head,...body].map(row=>row.map(q).join(',')).join('\r\n');
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ a.download='芳巽堂_'+F.sheet+'_'+today()+'.csv';
+ document.body.appendChild(a);a.click();a.remove();
 }
 
 /* ---------- 編輯表單 ---------- */
@@ -320,9 +405,19 @@ $('#pv').onclick=e=>{const id=e.target.id;
  if(id==='confirm')saveAll(false);
  if(id==='draft')saveAll(true)};
 $('#list').onclick=e=>{const r=e.target.closest('.row[data-k]');if(r)openForm(r.dataset.k,+r.dataset.i)};
+$('#stats').onclick=e=>{const c=e.target.closest('[data-dk]');if(c)openDetail(c.dataset.dk)};
+$('#mprev').onclick=()=>stepMonth(-1);
+$('#mnext').onclick=()=>stepMonth(1);
+$('#mall').onclick=()=>{MS[tab]=null;renderMonthly()};
+$('#mopen').onclick=()=>openDetail('month');
+$('#mbars').onclick=e=>{const b=e.target.closest('[data-m]');if(b){MS[tab]=b.dataset.m;renderMonthly()}};
+$('#dbx').onclick=e=>{const id=e.target.id;if(id==='dc'){$('#dm').hidden=true;return}
+ const r=e.target.closest('.row[data-k]');if(r){$('#dm').hidden=true;openForm(r.dataset.k,+r.dataset.i)}};
+$('#dm').onclick=e=>{if(e.target.id==='dm')$('#dm').hidden=true};
 $('#mb').onclick=e=>{const id=e.target.id;
  if(id==='mc')$('#md').hidden=true;if(id==='ms')saveForm();if(id==='mdel')delForm()};
 $('#md').onclick=e=>{if(e.target.id==='md')$('#md').hidden=true};
+document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>exportCSV(b.dataset.x));
 $('#refresh').onclick=loadAll;
 $('#url').value=cfg.url||'';$('#key').value=cfg.key||'';
 $('#save').onclick=()=>{cfg={url:$('#url').value.trim(),key:$('#key').value.trim()};localStorage.setItem('ledgerCfg',JSON.stringify(cfg));$('#smsg').textContent='已儲存（只存在這台裝置）'};
