@@ -25,4 +25,894 @@ h2{font-size:14px;color:var(--mu);font-weight:500;margin:0}
 .subwrap{display:flex;align-items:center;gap:6px;margin-bottom:14px;overflow-x:auto;padding:2px 1px 4px;scrollbar-width:none}
 .subwrap::-webkit-scrollbar{display:none}
 .subwrap button{flex:none;padding:7px 14px;border-radius:999px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
-.subwrap button.on{background:var(--ac);border-color:var(--ac);color:var(--bg);font-weight:600;box-shadow:0 2px 6px
+.subwrap button.on{background:var(--ac);border-color:var(--ac);color:var(--bg);font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.sep{flex:none;width:1px;height:22px;background:var(--ln);margin:0 4px}
+button{font:inherit;cursor:pointer}
+.b{padding:9px 14px;border-radius:12px;border:1px solid var(--ac);background:var(--card);color:var(--ac);font:inherit;cursor:pointer}
+.p{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+.d{color:var(--bad);border-color:var(--bad)}
+.chip{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--ac);background:none;color:var(--ac);margin:6px 6px 0 0;font:inherit;cursor:pointer}
+button:disabled{opacity:.5}
+textarea,input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:9px;width:100%}
+label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
+.btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.mu{color:var(--mu);font-size:13px}
+.warn{color:var(--wa);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:10px;margin-bottom:12px}
+.st{background:var(--card);border:1px solid var(--ln);border-left:4px solid var(--ac);border-radius:14px;padding:11px 12px;box-shadow:var(--sh)}
+.st.clk{cursor:pointer}
+.st .mu{display:block;margin-bottom:2px}
+.st b{display:block;font-size:19px;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.row{padding:11px 0 11px 12px;border-top:1px solid var(--ln);border-left:3px solid var(--ac);cursor:pointer;margin-left:-2px}
+.row:first-child{border-top:0}
+.grp{font-size:12px;color:var(--ac);font-weight:700;margin:16px 0 4px 2px;letter-spacing:.08em}
+.ln{font-size:12px;color:var(--mu);margin-top:3px}
+.pv{border:1px dashed var(--ac);border-radius:12px;padding:10px;margin:8px 0;font-size:14px;background:var(--bg)}
+.tag{font-size:11px;border:1px solid var(--ln);border-radius:999px;padding:0 7px;margin-left:5px;color:var(--mu);background:var(--bg)}
+.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.rr{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.br{display:grid;grid-template-columns:70px 1fr 88px;gap:10px;align-items:center;margin:7px 0;padding:3px 6px;border-radius:10px;font-size:13px;cursor:pointer}
+.br.on{background:var(--bg);box-shadow:inset 0 0 0 1px var(--ln)}
+.br.on>span:first-child{font-weight:700;color:var(--tx)}
+.bx{background:var(--ln);border-radius:999px;height:12px;overflow:hidden}
+.bx i{display:block;height:100%;border-radius:999px;transition:width .3s}
+.bv{text-align:right;font-variant-numeric:tabular-nums;color:var(--tx)}
+#md,#dm{position:fixed;inset:0;background:rgba(20,14,8,.5);display:flex;align-items:flex-end;justify-content:center;z-index:9;backdrop-filter:blur(2px)}
+#dm{z-index:10}
+#mb,#dbx{background:var(--card);width:100%;max-width:560px;max-height:90%;overflow:auto;border-radius:20px 20px 0 0;padding:16px calc(16px + env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.2)}
+</style></head>
+<body><main>
+<div class="head"><h1>廢柴男子．接案與製香帳務</h1><button id="gear" title="設定">⚙</button></div>
+<div class="tabs" id="gtabs"><button data-g="jobs">廢柴男子接案工作室</button><button data-g="shop">芳巽堂</button></div>
+<div class="subwrap" id="subwrap" hidden></div>
+
+<section id="setp" hidden>
+ <div class="card">
+  <h2>連線設定（只存在這台裝置的瀏覽器，不會放進程式）</h2>
+  <label>Apps Script 網址</label><input id="url" placeholder="https://script.google.com/macros/s/…/exec">
+  <label>金鑰</label><input id="key" type="password">
+  <div class="btns"><button class="b p" id="save">儲存設定</button><button class="b" id="ping">測試連線</button></div>
+  <div id="smsg" class="mu"></div>
+ </div>
+ <div class="card">
+  <h2>備份（下載 CSV，可用 Excel 或 Google 試算表開啟）</h2>
+  <div class="btns"><button class="b" data-x="jobs">接案</button><button class="b" data-x="sales">銷售</button><button class="b" data-x="prod">商品</button><button class="b" data-x="mats">材料</button><button class="b" data-x="chan">通路</button><button class="b" data-x="ship">寄售出貨</button><button class="b" data-x="settle">寄售結算</button><button class="b" data-x="stock">入庫</button></div>
+  <div class="mu" style="margin-top:8px">建議每週下載一次，存到 Google Drive。</div>
+ </div>
+</section>
+
+<section id="mainp">
+ <img id="banner" alt="" hidden>
+ <div class="card" id="entry">
+  <textarea id="inp" rows="3"></textarea>
+  <div class="btns"><button class="b" id="mic">🎤 語音</button><button class="b p" id="parse">整理</button><button class="b" id="fadd">用表單新增</button></div>
+  <div id="pv"></div>
+ </div>
+ <div class="card" id="repc" hidden>
+  <div class="hd"><h2>報表期間</h2><span class="btns" style="margin:0"><button class="b" data-rm="month">月</button><button class="b" data-rm="quarter">季</button><button class="b" data-rm="year">年</button></span></div>
+  <div class="btns" style="justify-content:center"><button class="b" id="rprev">◀</button><b id="rlab" style="min-width:150px;text-align:center"></b><button class="b" id="rnext">▶</button><button class="b" id="rnow">本期</button></div>
+  <div class="btns"><button class="b p" id="ana">產生分析文字</button></div>
+  <textarea id="anat" rows="12" hidden></textarea>
+  <div class="btns"><button class="b" id="cpy" hidden>複製全文</button><span id="cpm" class="mu"></span></div>
+ </div>
+ <div class="grid" id="stats"></div>
+ <div class="card" id="mcard" hidden>
+  <div class="hd"><h2 id="mt">每月</h2><span class="btns" style="margin:0"><button class="b" id="mprev">◀</button><b id="mlab" style="min-width:84px;text-align:center"></b><button class="b" id="mnext">▶</button><button class="b" id="mall">全部</button></span></div>
+  <div class="grid" id="mstats"></div>
+  <div id="mbars"></div>
+  <div class="btns"><button class="b" id="mopen">看這個月的明細</button></div>
+ </div>
+ <div class="card" id="c2c" hidden><h2 id="c2t"></h2><div id="c2" style="margin-top:8px"></div></div>
+ <div class="card" id="c3c" hidden><h2 id="c3t"></h2><div id="c3" style="margin-top:8px"></div></div>
+ <div class="card">
+  <div class="hd"><h2 id="lt">紀錄</h2><span class="btns" style="margin:0"><button class="b" id="add">＋新增</button><button class="b" id="refresh">重新讀取</button></span></div>
+  <div id="list"></div>
+  <div id="msg" class="mu"></div>
+ </div>
+ <div class="card" id="rankc" hidden><h2>銷量排行（依全部非草稿銷售，從熱門到冷門）</h2><div id="rank" style="margin-top:8px"></div></div>
+</section>
+</main>
+<div id="md" hidden><div id="mb"></div></div>
+<div id="dm" hidden><div id="dbx"></div></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const N=v=>Number(v)||0;
+const nt=n=>'NT$'+Math.round(N(n)).toLocaleString();
+const nc=n=>'NT$'+(Math.round(N(n)*10)/10).toLocaleString();
+const sum=(a,f)=>a.reduce((x,r)=>x+f(r),0);
+const agg=(rows,kf,vf)=>{const o={};rows.forEach(r=>{const k=kf(r);o[k]=(o[k]||0)+vf(r)});return o};
+const pad=n=>String(n).padStart(2,'0');
+const dim=(y,m)=>pad(new Date(y,m,0).getDate());
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+const ST=['進行中','已完稿','已請款','已入帳'];
+const CTYPES=['市集','網路','寄賣','其他'];
+const PAL=['#c98a2b','#4f8a5b','#2f4a6d','#b4533f','#7a5c3e','#7a6fa8','#3f8f8f','#c4708a'];
+const SHEETS={jobs:'接案',sales:'銷售',prod:'商品',mats:'材料',chan:'通路',ship:'寄售出貨',settle:'寄售結算',stock:'入庫'};
+const NATIVE=['jobs','sales','consign','stock','mats','prod','chan'];
+const GROUPS={
+ jobs:[[['jobs','接案'],['jrep','報表']]],
+ shop:[[['sales','銷售'],['consign','寄售'],['stock','入庫']],[['prod','商品'],['mats','材料'],['chan','通路']],[['srep','報表']]]
+};
+const groupOf=t=>(t==='jobs'||t==='jrep')?'jobs':(t==='set'?'set':'shop');
+const HINT={jobs:'一行一案，例：蔡志舜 稿費6500 已入帳\n可加：車資800 餐費340 工作日6/10 客戶Doiiin',
+  sales:'一行一場，例：西門 幽谷馥3 單價350 初光1 單價325 車資40 餐費165\n「西門」是簡稱，會自動對應西門紅樓創意市集；可加：收入1650、抽30、日期11/25',
+  consign:'出貨：出貨 起璽 伽南香10 11/25 運費120\n結算：結算 起璽 伽南香售出6 單價350 退回1 實收2100 入帳11/30',
+  stock:'一行一筆入庫，例：入庫 伽南香 8盒 11/25（批次編號自動產生）',
+  mats:'一行一筆進貨，例：11/19 沉香粉 600克 500元 承樂製香廠\n包材例：11/20 壓克力線香盒 100個 2800元 淘寶',
+  prod:'一行一個商品，例：伽南香 代號JN 定價350 產出8 粉材 沉香粉24 黏粉8 包材 壓克力線香盒1 別名 沉香\n已存在的商品會更新，只改你有寫的欄位',
+  chan:'一行一個子通路，例：西門紅樓創意市集 市集 簡稱西門 抽0\n寄賣店：起璽國際 寄賣 簡稱起璽 抽25 事後結算'};
+let cfg=JSON.parse(localStorage.getItem('ledgerCfg')||'{}');
+let D={jobs:[],sales:[],prod:[],mats:[],chan:[],ship:[],settle:[],stock:[]},tab=cfg.url?'jobs':'set',pend=[],ed=null;
+let MS={jobs:null,sales:null,consign:null},DET={};
+let RP={m:'month',y:new Date().getFullYear(),p:new Date().getMonth()+1};
+const CHS=()=>D.chan.map(c=>c.name);
+const resolveCh=t=>D.chan.find(c=>c.name===t)||D.chan.find(c=>c.alias&&c.alias===t)||null;
+const chOf=n=>resolveCh(n)||{};
+const chNames=t=>D.chan.filter(c=>!t||c.type===t).map(c=>c.name);
+
+/* ---------- 連線 ---------- */
+const errMsg=e=>({key:'金鑰不對',nosheet:'找不到工作表，請確認分頁名稱',notfound:'找不到這筆紀錄（可能已被刪除）',action:'指令錯誤'})[e]||e||'未知錯誤';
+function need(){if(!cfg.url||!cfg.key)throw new Error('請先到「設定」填入網址與金鑰')}
+function fromRow(sheet,r){if(sheet==='銷售')r.items=textToItems(r.items);return r}
+async function get(sheet){need();const u=new URL(cfg.url);u.searchParams.set('key',cfg.key);u.searchParams.set('sheet',sheet);
+ const j=await (await fetch(u)).json();if(!j.ok)throw new Error(errMsg(j.error));return j.rows.map(r=>fromRow(sheet,r))}
+async function send(sheet,action,body){need();
+ const r=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({key:cfg.key,sheet,action},body))});
+ const j=await r.json();if(!j.ok)throw new Error(errMsg(j.error));return j}
+async function loadAll(){
+ if(!cfg.url){$('#msg').textContent='請先到「設定」填入網址與金鑰';return}
+ const miss=[];
+ try{
+  for(const k of Object.keys(SHEETS)){
+   try{D[k]=await get(SHEETS[k])}
+   catch(e){if(k==='ship'||k==='settle'||k==='stock'){D[k]=[];miss.push(SHEETS[k])}else throw e}
+  }
+  render();
+  $('#msg').textContent='已讀取（'+new Date().toLocaleTimeString()+'）'+(miss.length?'；缺少工作表：'+miss.join('、'):'');
+ }catch(e){$('#msg').textContent='讀取失敗：'+e.message}
+}
+
+/* ---------- 解析 ---------- */
+const itemsToText=a=>(a||[]).map(i=>i.name+N(i.qty||1)+(N(i.price)?'@'+N(i.price):'')).join(' ');
+const textToItems=t=>String(t??'').split(/\s+/).filter(Boolean).map(x=>{const m=x.match(/^(.+?)(\d+)(?:@(\d+))?$/);return m?{name:m[1],qty:+m[2],price:m[3]?+m[3]:0}:null}).filter(Boolean);
+const parseCp=t=>String(t??'').split(/\s+/).filter(Boolean).map(x=>{const m=x.match(/^(.+?)(\d+)$/);return m?{channel:m[1],price:+m[2]}:null}).filter(Boolean);
+const dateTok=t=>{const m=t.match(/^(\d{1,2})[\/月](\d{1,2})日?$/);if(!m)return null;return new Date().getFullYear()+'-'+pad(+m[1])+'-'+pad(+m[2])};
+const money=(t,k)=>{if(!t.startsWith(k)||!/^\d+$/.test(t.slice(k.length)))return null;return +t.slice(k.length)};
+const SKW={車資:'fare',餐費:'meal',攤位費:'stall',攤位:'stall',住宿:'lodging',雜支:'other',總收入:'manualIncome',收入:'manualIncome'};
+const JKW={稿費:'fee',車資:'fare',餐費:'meal'};
+function parseSales(line){
+ let toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return null;
+ const f={items:[]},warn=[];
+ toks=toks.filter(t=>{const d=dateTok(t);if(d){f.date=d;return false}return true});
+ if(!toks.length)return null;
+ const head=resolveCh(toks[0]);
+ if(head){f.channel=head.name;f.market=head.name;toks=toks.slice(1)}
+ else{f.market=toks[0];toks=toks.slice(1)}
+ let last=null;
+ for(const t of toks){
+  let k;
+  if((k=t.match(/^單價(\d+)$/))){if(last)last.price=+k[1];else warn.push('「單價」前面沒有商品');continue}
+  const kw=Object.keys(SKW).find(x=>money(t,x)!==null);
+  if(kw){f[SKW[kw]]=money(t,kw);continue}
+  const ch=resolveCh(t);if(ch){f.channel=ch.name;f.market=ch.name;continue}
+  if(CTYPES.includes(t)){warn.push('請用子通路的簡稱，不要只寫「'+t+'」');continue}
+  if((k=t.match(/^抽(\d+)%?$/))){f.commission=+k[1];continue}
+  if((k=t.match(/^(.+?)(\d+)(?:@(\d+))?$/))){last={name:k[1],qty:+k[2],price:k[3]?+k[3]:0};f.items.push(last);continue}
+  warn.push('看不懂：'+t);
+ }
+ return {f,warn};
+}
+function parseJob(line){
+ const toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return null;
+ const f={case:toks[0]},warn=[];
+ for(const t of toks.slice(1)){
+  if(ST.includes(t)){f.status=t;continue}
+  const jk=Object.keys(JKW).find(x=>money(t,x)!==null);
+  if(jk){f[JKW[jk]]=money(t,jk);continue}
+  let c=t.match(/^客戶(.+)$/);if(c){f.client=c[1];continue}
+  const d=dateTok(t);if(d){f.workDate=d;continue}
+  warn.push('看不懂：'+t);
+ }
+ const old=D.jobs.find(j=>j.case===f.case);
+ if(f.status==='已入帳'&&!(old&&old.paidDate))f.paidDate=today();
+ if(f.status==='已請款'&&!(old&&old.invoiceDate))f.invoiceDate=today();
+ if(!old){f.status=f.status||'進行中';f.workDate=f.workDate||today();f.draft='正式'}
+ return {f,warn,old};
+}
+const UNIT=u=>u==='g'?'克':u;
+function parseMat(line){
+ const toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return null;
+ const f={date:today()},warn=[],rest=[];
+ for(const t of toks){
+  const d=dateTok(t);if(d){f.date=d;continue}
+  let m;
+  if((m=t.match(/^(\d+)(克|g|個|包|盒|條|張)$/))){f.qty=+m[1];f.unit=UNIT(m[2]);continue}
+  if((m=t.match(/^(\d+)元$/))){f.price=+m[1];continue}
+  rest.push(t);
+ }
+ if(!rest.length)return null;
+ f.name=rest.shift();f.supplier=rest.join(' ');
+ if(!f.unit)f.unit='個';
+ f.cat=f.unit==='克'?'粉材':'包材';
+ if(!f.qty)warn.push('沒有數量（粉材請寫克數，例如 600克）');
+ if(f.price==null)warn.push('沒有總價（請寫 500元）');
+ return {f,warn};
+}
+const PKEY={定價:'price',產出:'yield',別名:'aliases',大項目:'cat1',系列:'cat2',代號:'code'};
+function parseProd(line,c){
+ const toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return null;
+ const f={name:c.cm[toks[0]]||toks[0]},warn=[],ing=[],pack=[];
+ const itm=t=>{const m=t.match(/^(.+?)(\d+)$/);return m?{name:m[1],qty:+m[2]}:null};
+ let mode=null;
+ const setKey=(key,v)=>{f[key]=(key==='price'||key==='yield')?+String(v).replace(/[^\d.]/g,''):(key==='code'?String(v).toUpperCase():v)};
+ for(const t of toks.slice(1)){
+  if(mode&&Object.values(PKEY).includes(mode)){setKey(mode,t);mode=null;continue}
+  if(mode==='ing'||mode==='pack'){const it=itm(t);if(it){(mode==='ing'?ing:pack).push(it);continue}mode=null}
+  if(t==='粉材'){mode='ing';continue}
+  if(t==='包材'){mode='pack';continue}
+  if(t.startsWith('粉材')){mode='ing';const it=itm(t.slice(2));if(it)ing.push(it);continue}
+  if(t.startsWith('包材')){mode='pack';const it=itm(t.slice(2));if(it)pack.push(it);continue}
+  const kk=Object.keys(PKEY).find(k=>t.startsWith(k));
+  if(kk){const rest=t.slice(kk.length);if(rest)setKey(PKEY[kk],rest);else mode=PKEY[kk];continue}
+  warn.push('看不懂：'+t);
+ }
+ if(ing.length)f.ing=ing.map(i=>i.name+i.qty).join(' ');
+ if(pack.length)f.pack=pack.map(i=>i.name+i.qty).join(' ');
+ const old=D.prod.find(p=>p.name===f.name);
+ if(!old&&(!f.cat1||f.cat1==='線香')){if(f.price==null)warn.push('新商品沒有定價（例：定價350）');if(!f.yield)warn.push('新商品沒有產出盒數（例：產出8）');if(!ing.length)warn.push('新商品沒有粉材用量（例：粉材 沉香粉24）')}
+ if(f.code&&D.prod.some(p=>p.code===f.code&&p.name!==f.name))warn.push('代號 '+f.code+' 已被其他商品使用，請改用第三個字母');
+ Object.keys(f).forEach(k=>{if(f[k]===''||f[k]===undefined||f[k]!==f[k])delete f[k]});
+ return {f,warn,old};
+}
+function parseChan(line){
+ const toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return null;
+ const f={name:toks[0]},warn=[],note=[];
+ const old=D.chan.find(c=>c.name===f.name);
+ for(const t of toks.slice(1)){
+  let m;
+  if(CTYPES.includes(t)){f.type=t;continue}
+  if((m=t.match(/^簡稱(.+)$/))){f.alias=m[1];continue}
+  if((m=t.match(/^抽(\d+)%?$/))){f.commission=+m[1];continue}
+  if(t==='事後結算'||t==='當場收款'){f.settle=t;continue}
+  note.push(t);
+ }
+ if(note.length)f.note=note.join(' ');
+ if(!old){
+  if(!f.type)warn.push('請指定母分類（市集、網路、寄賣、其他）');
+  f.commission=f.commission??0;
+  f.settle=f.settle||(f.type==='寄賣'?'事後結算':'當場收款');
+ }
+ return {f,warn,old};
+}
+const CK={售出:'sold',退回:'returned',耗損:'lost'};
+function parseCon(line,c){
+ const toks=line.trim().split(/\s+/).filter(Boolean);if(toks.length<2)return null;
+ const kind=toks[0]==='結算'?'settle':toks[0]==='出貨'?'ship':null;
+ if(!kind)return {kind:null,warn:['行首請寫「出貨」或「結算」']};
+ const warn=[],ci=resolveCh(toks[1]),ch=ci?ci.name:toks[1];
+ if(!ci)warn.push('「'+toks[1]+'」不在通路裡，請先到通路新增（母分類選寄賣）');
+ let date=null,fare=null,other=null,recv=null,paid=null,last=null;
+ const map={};
+ const get=n=>map[n]=map[n]||{name:n,qty:0,sold:0,returned:0,lost:0,price:0};
+ for(const t of toks.slice(2)){
+  let m;
+  const d=dateTok(t);if(d){date=d;continue}
+  if((m=t.match(/^運費(\d+)$/))){fare=+m[1];continue}
+  if((m=t.match(/^其他(\d+)$/))){other=+m[1];continue}
+  if((m=t.match(/^實收(\d+)$/))){recv=+m[1];continue}
+  if(t.startsWith('入帳')&&dateTok(t.slice(2))){paid=dateTok(t.slice(2));continue}
+  if((m=t.match(/^單價(\d+)$/))){if(last)last.price=+m[1];else warn.push('單價前面沒有商品');continue}
+  if((m=t.match(/^(售出|退回|耗損)(\d+)$/))){if(last)last[CK[m[1]]]+=+m[2];else warn.push('「'+m[1]+'」前面沒有商品');continue}
+  if((m=t.match(/^(.+?)(售出|退回|耗損)(\d+)$/))){last=get(canon(c,m[1]));last[CK[m[2]]]+=+m[3];continue}
+  if((m=t.match(/^(.+?)(\d+)$/))){last=get(canon(c,m[1]));last.qty+=+m[2];continue}
+  warn.push('看不懂：'+t);
+ }
+ if(!date){date=today();warn.push('沒寫日期，預設今天')}
+ const names=Object.keys(map);
+ if(!names.length)return {kind,warn:warn.concat(['沒有寫商品']),rows:[]};
+ names.forEach(n=>{if(!c.dd[n])warn.push('找不到商品「'+n+'」，請確認名稱或到商品頁加別名')});
+ if(kind==='ship'){
+  if(fare!=null&&names.length>1)warn.push('運費記在第一項：'+names[0]);
+  return {kind,warn,rows:names.map((n,i)=>({date,channel:ch,product:n,qty:map[n].qty,fare:i===0&&fare!=null?fare:0,other:i===0&&other!=null?other:0,note:''}))};
+ }
+ if(recv!=null&&names.length>1)warn.push('實收記在第一項，多商品請分開記');
+ return {kind,warn,rows:names.map((n,i)=>{const x=map[n],sold=x.sold+x.qty;
+  let price=x.price;if(!price&&c.dd[n]){price=priceFor(c.dd[n],ch);warn.push(n+' 沿用'+ch+'售價 '+price)}
+  return {date,channel:ch,product:n,sold,price,commission:N(ci?ci.commission:0),received:(recv!=null&&i===0)?recv:'',paidDate:paid||'',returned:x.returned,lost:x.lost,note:''}})};
+}
+function parseStock(line,c){
+ let toks=line.trim().split(/\s+/).filter(Boolean);if(toks[0]==='入庫')toks=toks.slice(1);if(!toks.length)return null;
+ const f={},warn=[];let pn=null,qty=null;
+ for(const t of toks){
+  const d=dateTok(t);if(d){f.date=d;continue}
+  const m=t.match(/^(\d+)盒?$/);if(m&&qty==null){qty=+m[1];continue}
+  if(!pn){pn=canon(c,t);continue}
+  warn.push('看不懂：'+t);
+ }
+ if(!pn)return null;
+ f.product=pn;f.qty=qty||0;f.date=f.date||today();
+ if(!c.dd[pn])warn.push('找不到商品「'+pn+'」');
+ if(!qty)warn.push('沒有盒數（例：伽南香 8盒）');
+ const p=c.dd[pn];f.unitCost=p?+p.t.toFixed(2):0;
+ f.batch=newBatch(pn,f.date);
+ return {f,warn};
+}
+function build(){
+ const lines=$('#inp').value.split('\n').map(s=>s.trim()).filter(Boolean);
+ const lastS=D.sales.filter(real).sort(byKey('date'))[0];
+ const c=ctx();
+ pend=lines.flatMap(l=>{
+  if(tab==='jobs'){const p=parseJob(l);if(!p)return [];return [{sheet:'接案',op:p.old?'update':'add',id:p.old&&p.old.id,f:p.f,warn:p.warn}]}
+  if(tab==='mats'){const p=parseMat(l);if(!p)return [];return [{sheet:'材料',op:'add',f:p.f,warn:p.warn}]}
+  if(tab==='prod'){const p=parseProd(l,c);if(!p)return [];return [{sheet:'商品',op:p.old?'update':'add',id:p.old&&p.old.id,f:p.f,warn:p.warn}]}
+  if(tab==='chan'){const p=parseChan(l);if(!p)return [];return [{sheet:'通路',op:p.old?'update':'add',id:p.old&&p.old.id,f:p.f,warn:p.warn}]}
+  if(tab==='stock'){const p=parseStock(l,c);if(!p)return [];return [{sheet:'入庫',op:'add',f:p.f,warn:p.warn}]}
+  if(tab==='consign'){
+   const p=parseCon(l,c);if(!p)return [];
+   const rows=p.rows||[];
+   if(!p.kind||!rows.length)return [{sheet:'錯誤',op:'none',f:{},warn:p.warn.length?p.warn:['無法辨識這一行']}];
+   return rows.map((r,i)=>({sheet:p.kind==='ship'?'寄售出貨':'寄售結算',op:'add',f:r,warn:i===0?p.warn:[]}));
+  }
+  const p=parseSales(l);if(!p)return [];
+  const f=p.f,warn=p.warn;
+  if(!f.channel){
+   if(lastS&&lastS.channel){f.channel=lastS.channel;warn.push('找不到通路「'+f.market+'」，沿用上一場：'+lastS.channel)}
+   else warn.push('沒有指定通路（請用簡稱，例如：西門）');
+  }
+  const ci=chOf(f.channel);
+  if(f.commission===undefined)f.commission=N(ci.commission);
+  if(!f.settle)f.settle=ci.settle||'當場收款';
+  if(lastS&&lastS.channel===f.channel){['stall','fare'].forEach(k=>{
+   if(f[k]===undefined&&lastS[k]!==undefined&&lastS[k]!==''){f[k]=lastS[k];warn.push('沿用上一場：'+k+' '+lastS[k])}})}
+  f.date=f.date||today();f.draft='正式';
+  if(f.settle==='當場收款')f.paidDate=f.date;
+  f.items.forEach(i=>{
+   const cn=canon(c,i.name);
+   if(!c.dd[cn])warn.push('找不到商品「'+i.name+'」，請確認名稱或到商品頁加別名');
+   i.name=cn;
+   if(!i.price&&c.dd[cn]){i.price=priceFor(c.dd[cn],f.channel);warn.push(cn+' 沿用'+f.channel+'售價 '+i.price)}
+   else if(!i.price)warn.push(cn+' 未填單價');
+  });
+  if(!f.items.length&&!f.manualIncome)warn.push('沒有品項也沒有總收入');
+  if(D.sales.some(s=>real(s)&&s.market===f.market&&s.date===f.date))warn.push('同一天同場次已有紀錄，請確認不是重複');
+  return [{sheet:'銷售',op:'add',f,warn}];
+ });
+ drawPv();
+}
+function drawPv(){
+ if(!pend.length){$('#pv').innerHTML='';return}
+ $('#pv').innerHTML=pend.map(p=>{const f=p.f;let txt;
+  if(p.sheet==='接案')txt=[f.case,f.client,f.status,f.fee?nt(f.fee):'',f.workDate?'工作 '+f.workDate:'',f.paidDate?'入帳 '+f.paidDate:'',f.fare?'車資 '+f.fare:'',f.meal?'餐費 '+f.meal:''].filter(Boolean).join(' · ');
+  else if(p.sheet==='材料')txt=[f.date,f.name,(f.qty||'?')+(f.unit||''),f.price!=null?nt(f.price):'未填總價',f.supplier].filter(Boolean).join(' · ');
+  else if(p.sheet==='商品')txt=[f.name,f.code?'代號 '+f.code:'',f.aliases?'別名 '+f.aliases:'',f.price!=null?'定價 '+nt(f.price):'',f.yield?'產出 '+f.yield+' 盒':'',f.ing?'粉材 '+f.ing:'',f.pack?'包材 '+f.pack:''].filter(Boolean).join(' · ');
+  else if(p.sheet==='通路')txt=[f.name,f.type,f.alias?'簡稱 '+f.alias:'',f.commission!=null?'抽成 '+f.commission+'%':'',f.settle,f.note].filter(Boolean).join(' · ');
+  else if(p.sheet==='入庫')txt=[f.date,f.product,f.batch,N(f.qty)+'盒','每盒成本 '+nc(f.unitCost)].filter(Boolean).join(' · ');
+  else if(p.sheet==='寄售出貨')txt=[f.date,f.channel,f.product,N(f.qty)+'盒',f.fare?'運費 '+f.fare:'',f.other?'其他 '+f.other:''].filter(Boolean).join(' · ');
+  else if(p.sheet==='寄售結算')txt=[f.date,f.channel,f.product,'售出 '+N(f.sold),'單價 '+nt(f.price),N(f.returned)?'退回 '+f.returned:'',N(f.lost)?'耗損 '+f.lost:'',(f.received!==''&&f.received!=null)?'實收 '+nt(f.received):'',f.paidDate?'入帳 '+f.paidDate:'待入帳'].filter(Boolean).join(' · ');
+  else if(p.sheet==='錯誤')txt='';
+  else txt=[f.date,f.market,f.channel,f.settle,(f.items||[]).map(x=>x.name+'×'+x.qty+(x.price?'@'+x.price:'')).join('、'),f.manualIncome?'總收入 '+nt(f.manualIncome):'',f.stall?'攤位 '+nt(f.stall):'',f.fare?'車資 '+nt(f.fare):'',f.meal?'餐費 '+nt(f.meal):''].filter(Boolean).join(' · ');
+  return `<div class="pv"><b>${p.op==='none'?'錯誤':p.op==='update'?'更新':'新增'}${esc(p.sheet)}</b>　${esc(txt)}${p.warn.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join('')}</div>`}).join('')
+  +`<div class="btns"><button class="b" id="cancel">取消</button>${(tab==='jobs'||tab==='sales')?'<button class="b" id="draft">存成草稿</button>':''}<button class="b p" id="confirm">確認儲存</button></div>`;
+}
+const toRow=(sheet,f,draft)=>{const o=Object.assign({},f);delete o.id;delete o.op;delete o.warn;if(sheet==='銷售')o.items=itemsToText(f.items);if(draft&&(sheet==='接案'||sheet==='銷售'))o.draft='草稿';return o};
+async function syncSale(r){
+ const sold=N(r.sold);
+ const d={market:r.channel,date:r.date,channel:r.channel,commission:N(r.commission),settle:'事後結算',paidDate:r.paidDate||'',items:sold?r.product+sold+'@'+N(r.price):'',draft:'正式',note:'寄售結算自動產生'};
+ if(r.saleId){
+  if(sold>0)await send('銷售','update',{id:r.saleId,data:d});
+  else{await send('銷售','delete',{id:r.saleId});await send('寄售結算','update',{id:r.id,data:{saleId:''}})}
+ }else if(sold>0){const x=await send('銷售','add',{data:d});await send('寄售結算','update',{id:r.id,data:{saleId:x.id}})}
+}
+async function saveConSettle(list){
+ const g={};list.forEach(f=>{const k=f.channel+'|'+f.date;(g[k]=g[k]||[]).push(f)});
+ for(const k of Object.keys(g)){
+  const rs=g[k],sold=rs.filter(f=>N(f.sold)>0);
+  let saleId='';
+  if(sold.length){
+   const r=await send('銷售','add',{data:{market:rs[0].channel,date:rs[0].date,channel:rs[0].channel,commission:N(rs[0].commission),settle:'事後結算',paidDate:rs[0].paidDate||'',items:sold.map(f=>f.product+N(f.sold)+'@'+N(f.price)).join(' '),draft:'正式',note:'寄售結算自動產生'}});
+   saleId=r.id||'';
+  }
+  for(const f of rs){const d=Object.assign({},f,{saleId});delete d.warn;await send('寄售結算','add',{data:d})}
+ }
+}
+async function saveAll(draft){
+ $('#msg').textContent='儲存中…';
+ try{
+  const list=pend.filter(p=>p.op!=='none');
+  const settles=list.filter(p=>p.sheet==='寄售結算').map(p=>p.f);
+  for(const p of list.filter(p=>p.sheet!=='寄售結算')){const body=toRow(p.sheet,p.f,draft);
+   if(p.op==='update')await send(p.sheet,'update',{id:p.id,data:body});
+   else await send(p.sheet,'add',{data:body})}
+  if(settles.length)await saveConSettle(settles);
+  $('#msg').textContent='已儲存 '+list.length+' 筆'+(settles.length?'（結算已同步建立銷售紀錄）':'');
+  pend=[];$('#inp').value='';drawPv();await loadAll();
+ }catch(e){$('#msg').textContent='儲存失敗：'+e.message}
+}
+
+/* ---------- 批次編號 ---------- */
+function codeOf(name){const p=D.prod.find(x=>x.name===name);return (p&&p.code)||name.slice(0,2)}
+function newBatch(name,date,ignoreId){
+ const d=date||today(),y=d.slice(0,4),base=codeOf(name)+d.slice(5,7)+d.slice(8,10);
+ const used=D.stock.filter(s=>s.id!==ignoreId&&(s.date||'').slice(0,4)===y&&(s.batch===base||(s.batch||'').startsWith(base+'-'))).map(s=>s.batch);
+ if(!used.includes(base))return base;
+ let i=2;while(used.includes(base+'-'+i))i++;return base+'-'+i;
+}
+
+/* ---------- 商品成本、別名、現貨 ---------- */
+function matCost(){const m={};D.mats.forEach(x=>{const a=m[x.name]=m[x.name]||{p:0,q:0};a.p+=N(x.price);a.q+=N(x.qty)});
+ const r={};Object.keys(m).forEach(k=>{r[k]=m[k].q?m[k].p/m[k].q:0});return r}
+function prodsDerived(){
+ const mc=matCost();
+ return D.prod.map(p=>{
+  const ingL=textToItems(p.ing),packL=textToItems(p.pack),cpL=parseCp(p.cprices),y=N(p.yield)||1,miss=[];
+  const cost=(L,per)=>L.reduce((a,i)=>{if(!(i.name in mc)){miss.push(i.name);return a}return a+i.qty*mc[i.name]/per},0);
+  const pw=cost(ingL,y),pk=cost(packL,1);
+  return {p,ingL,packL,cpL,pw,pk,t:pw+pk,miss:[...new Set(miss)],empty:!ingL.length&&!packL.length};
+ });
+}
+const priceFor=(d,ch)=>{const r=d.cpL.find(x=>x.channel===ch);return r?r.price:N(d.p.price)};
+function ctx(){
+ const ds=prodsDerived(),cm={},dd={},cost={};
+ D.prod.forEach(p=>{cm[p.name]=p.name;String(p.aliases||'').split(/[、,，\s]+/).filter(Boolean).forEach(a=>{if(!(a in cm))cm[a]=p.name})});
+ ds.forEach(d=>{dd[d.p.name]=d;cost[d.p.name]=d.t});
+ return {ds,cm,dd,cost};
+}
+const canon=(c,n)=>c.cm[n]||n;
+const cogs=(s,c)=>sum(s.items||[],i=>N(i.qty||1)*(c.cost[canon(c,i.name)]||0));
+const unitCost=(c,n)=>c.cost[canon(c,n)]||0;
+function stockOf(c){
+ const m={};const g=n=>m[n]=m[n]||{name:n,made:0,ship:0,ret:0,direct:0,sold:0,lost:0};
+ D.stock.forEach(x=>g(canon(c,x.product)).made+=N(x.qty));
+ D.ship.forEach(x=>g(canon(c,x.product)).ship+=N(x.qty));
+ D.settle.forEach(x=>{const o=g(canon(c,x.product));o.sold+=N(x.sold);o.ret+=N(x.returned);o.lost+=N(x.lost)});
+ D.sales.filter(s=>real(s)&&chOf(s.channel).type!=='寄賣').forEach(s=>(s.items||[]).forEach(i=>g(canon(c,i.name)).direct+=N(i.qty||1)));
+ return Object.values(m).filter(o=>o.made||o.ship).map(o=>Object.assign(o,{hand:o.made-o.ship+o.ret-o.direct,on:o.ship-o.ret-o.sold-o.lost}));
+}
+
+/* ---------- 統計公式 ---------- */
+const inc=s=>(s.items&&s.items.length)?sum(s.items,i=>N(i.qty||1)*N(i.price)):N(s.manualIncome);
+const exp=s=>N(s.stall)+N(s.fare)+N(s.meal)+N(s.lodging)+N(s.other);
+const comm=s=>inc(s)*N(s.commission)/100;
+const net=s=>inc(s)-comm(s)-exp(s);
+const real=r=>r.draft!=='草稿';
+const byKey=k=>(a,b)=>(b[k]||'').localeCompare(a[k]||'');
+const ji=r=>({k:'jobs',i:D.jobs.indexOf(r),n:r.case,s:(r.client||'')+' · '+(r.status||'')+(r.paidDate?' · 入帳 '+r.paidDate:''),a:N(r.fee)});
+const si=(r,a)=>({k:'sales',i:D.sales.indexOf(r),n:r.market,s:(r.date||'')+' · '+(r.channel||''),a});
+
+/* ---------- 寄售計算 ---------- */
+const gross=s=>N(s.sold)*N(s.price);
+const recvOf=s=>(s.received===''||s.received==null)?gross(s)-gross(s)*N(s.commission)/100:N(s.received);
+const feeOf=s=>N(s.fare)+N(s.other);
+const mKey=d=>(d||'').slice(0,7);
+const cogsOfS=(s,c)=>N(s.sold)*unitCost(c,s.product);
+const lossOfS=(s,c)=>N(s.lost)*unitCost(c,s.product);
+const conItem=(r,k)=>k==='settle'
+ ?{k:'settle',i:D.settle.indexOf(r),n:r.product+'（'+r.channel+'）',s:(r.date||'')+' · 售出 '+N(r.sold)+' · 入帳'+(r.paidDate?' '+r.paidDate:'待入帳'),a:recvOf(r)}
+ :{k:'ship',i:D.ship.indexOf(r),n:'出貨 '+r.product+' '+N(r.qty)+'盒（'+r.channel+'）',s:(r.date||'')+' · 費用 '+nt(feeOf(r)),a:feeOf(r)};
+function consignStock(c){
+ const m={};
+ const add=(ch,pr,f,v)=>{const n=canon(c,pr),k=ch+'|'+n;m[k]=m[k]||{channel:ch,product:n,ship:0,sold:0,ret:0,lost:0};m[k][f]+=v};
+ D.ship.forEach(s=>add(s.channel,s.product,'ship',N(s.qty)));
+ D.settle.forEach(s=>{add(s.channel,s.product,'sold',N(s.sold));add(s.channel,s.product,'ret',N(s.returned));add(s.channel,s.product,'lost',N(s.lost))});
+ return Object.values(m).map(x=>{const on=x.ship-x.sold-x.ret-x.lost;return Object.assign(x,{on,value:Math.max(0,on)*unitCost(c,x.product)})});
+}
+function consignMonths(c){
+ const m={};
+ const get=k=>m[k]=m[k]||{k,gross:0,recv:0,cogs:0,loss:0,fees:0,settles:[],ships:[]};
+ D.settle.forEach(s=>{if(!s.date)return;const o=get(mKey(s.date));o.gross+=gross(s);o.recv+=recvOf(s);o.cogs+=cogsOfS(s,c);o.loss+=lossOfS(s,c);o.settles.push(s)});
+ D.ship.forEach(s=>{if(!s.date)return;const o=get(mKey(s.date));o.fees+=feeOf(s);o.ships.push(s)});
+ return Object.values(m).sort((a,b)=>a.k.localeCompare(b.k));
+}
+const mNet=m=>m.recv-m.cogs-m.loss-m.fees;
+
+/* ---------- 報表期間 ---------- */
+function rngOf(m,y,p){
+ if(m==='year')return {f:y+'-01-01',t:y+'-12-31',label:y+' 年'};
+ if(m==='quarter'){const s=(p-1)*3+1,e=s+2;return {f:y+'-'+pad(s)+'-01',t:y+'-'+pad(e)+'-'+dim(y,e),label:y+' 年 Q'+p+'（'+s+'–'+e+' 月）'}}
+ return {f:y+'-'+pad(p)+'-01',t:y+'-'+pad(p)+'-'+dim(y,p),label:y+' 年 '+p+' 月'};
+}
+const curR=()=>rngOf(RP.m,RP.y,RP.p);
+function shiftP(q,d){
+ if(q.m==='year')q.y+=d;
+ else if(q.m==='quarter'){const t=q.y*4+q.p-1+d;q.y=Math.floor(t/4);q.p=t%4+1}
+ else {const t=q.y*12+q.p-1+d;q.y=Math.floor(t/12);q.p=t%12+1}
+}
+const prevR=()=>{const q=Object.assign({},RP);shiftP(q,-1);return rngOf(q.m,q.y,q.p)};
+function jobsOf(R){
+ const inR=d=>!!d&&d>=R.f&&d<=R.t;
+ const jp=D.jobs.filter(j=>real(j)&&j.status==='已入帳'&&inR(j.paidDate));
+ const fee=sum(jp,j=>N(j.fee)),cost=sum(jp,j=>N(j.fare)+N(j.meal));
+ return {rows:jp,fee,n:jp.length,cost,net:fee-cost,byC:agg(jp,j=>j.client||'未填',j=>N(j.fee))};
+}
+const jobsWait=()=>sum(D.jobs.filter(j=>real(j)&&j.status!=='已入帳'),j=>N(j.fee));
+function metrics(R,c){
+ const inR=d=>!!d&&d>=R.f&&d<=R.t;
+ const dir=D.sales.filter(s=>real(s)&&chOf(s.channel).type!=='寄賣'&&inR(s.paidDate||(s.settle==='事後結算'?'':s.date)));
+ const direct={inc:sum(dir,inc),comm:sum(dir,comm),exp:sum(dir,exp),cogs:sum(dir,s=>cogs(s,c)),n:dir.length};
+ direct.net=direct.inc-direct.comm-direct.exp-direct.cogs;
+ const st=D.settle.filter(s=>inR(s.date)),sh=D.ship.filter(s=>inR(s.date));
+ const cons={sold:sum(st,s=>N(s.sold)),gross:sum(st,gross),recv:sum(st,recvOf),cogs:sum(st,s=>N(s.sold)*unitCost(c,s.product)),loss:sum(st,s=>N(s.lost)*unitCost(c,s.product)),fees:sum(sh,feeOf),lostQ:sum(st,s=>N(s.lost)),ret:sum(st,s=>N(s.returned))};
+ cons.comm=cons.gross-cons.recv;
+ cons.net=cons.recv-cons.cogs-cons.loss-cons.fees;
+ const q={};dir.forEach(s=>(s.items||[]).forEach(i=>{const n=canon(c,i.name);q[n]=(q[n]||0)+N(i.qty||1)}));
+ st.forEach(s=>{const n=canon(c,s.product);q[n]=(q[n]||0)+N(s.sold)});
+ const chs=agg(dir,s=>chOf(s.channel).type||'未分類',s=>inc(s)-comm(s)-exp(s)-cogs(s,c));
+ if(cons.sold||cons.gross)chs['寄售']=cons.net;
+ return {R,direct,cons,q,chs,gross:direct.inc+cons.gross,net:direct.net+cons.net};
+}
+
+/* ---------- 畫面 ---------- */
+function setTab(t){tab=t;pend=[];drawPv();$('#msg').textContent='';render();if(tab!=='set')loadAll()}
+function render(){
+ const g=groupOf(tab);
+ document.body.dataset.g=g==='set'?'':g;
+ document.querySelectorAll('#gtabs button').forEach(b=>b.classList.toggle('on',b.dataset.g===g));
+ $('#gear').classList.toggle('on',tab==='set');
+ const secs=GROUPS[g]||[];
+ $('#subwrap').hidden=!secs.length;
+ $('#subwrap').innerHTML=secs.map((items,gi)=>(gi?'<span class="sep"></span>':'')+items.map(([t,l])=>`<button data-t="${t}" class="${t===tab?'on':''}">${l}</button>`).join('')).join('');
+ $('#setp').hidden=tab!=='set';$('#mainp').hidden=tab==='set';
+ const bn=$('#banner'),src=g==='jobs'?'jobs.gif':(g==='shop'?'sales.gif':'');
+ if(!src)bn.hidden=true;else{bn.hidden=false;if(bn.getAttribute('src')!==src)bn.setAttribute('src',src)}
+ if(tab==='set')return;
+ const isRep=tab==='jrep'||tab==='srep';
+ $('#entry').hidden=!NATIVE.includes(tab);$('#rankc').hidden=tab!=='prod';$('#repc').hidden=!isRep;
+ $('#c2c').hidden=true;$('#c3c').hidden=true;
+ if(NATIVE.includes(tab))$('#inp').placeholder=HINT[tab];
+ DET={};
+ const c=ctx();
+ if(tab==='jobs')renderJobs();
+ else if(tab==='sales')renderSales(c);
+ else if(tab==='consign')renderConsign(c);
+ else if(tab==='stock')renderStock(c);
+ else if(tab==='prod')renderProd(c);
+ else if(tab==='mats')renderMats();
+ else if(tab==='chan')renderChan();
+ else if(tab==='jrep')renderJrep();
+ else if(tab==='srep')renderSrep(c);
+ const isSales=tab==='jobs'||tab==='sales'||tab==='consign';
+ if(isSales){renderMonthly();renderGroups()}else{$('#mcard').hidden=true}
+ if(isRep)$('#rlab').textContent=curR().label;
+}
+function setStats(list){$('#stats').innerHTML=list.map(s=>`<div class="st${s[2]?' clk':''}"${s[2]?` data-dk="${s[2]}"`:''}><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('')}
+function setList(html){$('#list').innerHTML=html||'<div class="mu">尚無紀錄</div>'}
+function bars(list){const mx=Math.max(1,...list.map(x=>Math.abs(x.v)));
+ return list.map((x,i)=>{const col=x.v<0?'var(--bad)':PAL[i%PAL.length];
+  return `<div class="br${x.on?' on':''}"${x.k?` data-m="${esc(x.k)}"`:''}><span>${esc(x.l)}</span><div class="bx"><i style="width:${Math.max(2,Math.abs(x.v)/mx*100)}%;background:${col}"></i></div><span class="bv">${x.t}</span></div>`}).join('')||'<div class="mu">尚無資料</div>'}
+function renderJobs(){
+ const rows=D.jobs.slice().sort(byKey('workDate')),r0=rows.filter(real);
+ const paidR=r0.filter(r=>r.status==='已入帳'),waitR=r0.filter(r=>r.status!=='已入帳');
+ const paid=sum(paidR,r=>N(r.fee)),wait=sum(waitR,r=>N(r.fee));
+ DET={paid:{t:'已入帳稿費',sum:nt(paid),items:paidR.map(ji)},wait:{t:'待收款',sum:nt(wait),items:waitR.map(ji)},cnt:{t:'案件明細',sum:r0.length+' 件',items:r0.map(ji)}};
+ setStats([['已入帳稿費',nt(paid),'paid'],['待收款',nt(wait),'wait'],['案件數',r0.length,'cnt']]);
+ $('#lt').textContent='接案紀錄（點一筆可編輯，下方按鈕可快速改狀態）';
+ setList(rows.map(r=>{const st=r.status||'進行中';
+  const chips=['已完稿','已請款','已入帳'].filter(s=>ST.indexOf(s)>ST.indexOf(st));
+  return `<div class="row" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<div class="mu">${esc(r.client||'')} · ${esc(st)} · 稿費 ${nt(r.fee)}${r.paidDate?' · 入帳 '+esc(r.paidDate):''}</div>${chips.map(s=>`<button class="chip" data-id="${esc(r.id)}" data-st="${s}">→ ${s}</button>`).join('')}</div>`}).join(''));
+}
+async function quickStatus(id,st){
+ const r=D.jobs.find(x=>x.id===id);if(!r)return;
+ const data={status:st};
+ if(st==='已請款'&&!r.invoiceDate)data.invoiceDate=today();
+ if(st==='已入帳')data.paidDate=r.paidDate||today();
+ try{await send('接案','update',{id,data});await loadAll()}catch(e){$('#msg').textContent='更新失敗：'+e.message}
+}
+function renderSales(c){
+ const rows=D.sales.slice().sort(byKey('date')),r0=rows.filter(real);
+ const I=sum(r0,inc),NT=sum(r0,net),CG=sum(r0,s=>cogs(s,c));
+ const pendR=r0.filter(r=>r.settle==='事後結算'&&!r.paidDate),PD=sum(pendR,r=>inc(r)-comm(r));
+ DET={inc:{t:'收入明細',sum:nt(I),items:r0.map(r=>si(r,inc(r)))},net:{t:'淨利明細',sum:nt(NT),items:r0.map(r=>si(r,net(r)))},cost:{t:'商品成本明細',sum:nt(CG),items:r0.filter(r=>cogs(r,c)>0).map(r=>si(r,cogs(r)))},after:{t:'扣成本後明細',sum:nt(NT-CG),items:r0.map(r=>si(r,net(r)-cogs(r)))},pend:{t:'待結算明細',sum:nt(PD),items:pendR.map(r=>si(r,inc(r)-comm(r)))},cnt:{t:'場次明細',sum:r0.length+' 場',items:r0.map(r=>si(r,inc(r)))}};
+ setStats([['收入',nt(I),'inc'],['淨利',nt(NT),'net'],['商品成本',nt(CG),'cost'],['扣成本後',nt(NT-CG),'after'],['待結算',nt(PD),'pend'],['場次',r0.length,'cnt']]);
+ $('#lt').textContent='銷售紀錄（點一筆可編輯）';
+ setList(rows.map(r=>{const g=cogs(r,c);return `<div class="row" data-k="sales" data-i="${D.sales.indexOf(r)}"><b>${esc(r.market)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<span class="tag">${esc(r.channel||'')}</span><div class="mu">${esc(r.date||'')} · 收入 ${nt(inc(r))} · 淨利 ${nt(net(r))}${g?' · 成本 '+nt(g):''}${(r.items||[]).length?' · '+r.items.map(i=>esc(canon(c,i.name))+'×'+i.qty).join('、'):''}</div></div>`}).join(''));
+}
+function renderConsign(c){
+ const st=consignStock(c),months=consignMonths(c);
+ const onRows=st.filter(x=>x.on>0);
+ const onN=sum(onRows,x=>x.on),onV=sum(onRows,x=>x.on*unitCost(c,x.product));
+ const G=sum(months,m=>m.gross),RV=sum(months,m=>m.recv),Nt=sum(months,mNet);
+ const RT=sum(st,x=>x.ret),LN=sum(st,x=>x.lost);
+ DET={cstock:{t:'寄放中商品',sum:onN+' 盒・成本 '+nt(onV),items:onRows.map(x=>({n:x.product+'（'+x.channel+'）',s:'出貨 '+x.ship+'・售出 '+x.sold+'・退回 '+x.ret+'・耗損 '+x.lost,a:x.on*unitCost(c,x.product)}))},
+  gross:{t:'售出金額明細',sum:nt(G),items:D.settle.filter(s=>s.date).map(s=>conItem(s,'settle'))},
+  fees:{t:'出貨費用明細',sum:nt(sum(months,m=>m.fees)),items:D.ship.filter(s=>s.date).map(s=>conItem(s,'ship'))}};
+ setStats([['寄放中（盒）',onN,'cstock'],['寄放成本',nt(onV)],['售出金額',nt(G),'gross'],['抽成',nt(G-RV)],['淨利',nt(Nt)],['退回待上架',RT],['耗損盒數',LN]]);
+ $('#lt').textContent='寄賣店與時間軸（點一筆可編輯）';
+ const chans=[...new Set([...D.ship.map(s=>s.channel),...D.settle.map(s=>s.channel)].filter(Boolean))];
+ const cards=chans.map(ch=>{
+  const sh=D.ship.filter(s=>s.channel===ch),se=D.settle.filter(s=>s.channel===ch);
+  const lastS=sh.map(s=>s.date||'').sort().pop()||'',lastT=se.map(s=>s.date||'').sort().pop()||'';
+  const days=lastT?Math.floor((Date.now()-new Date(lastT).getTime())/864e5):null;
+  const my=st.filter(x=>x.channel===ch&&x.on>0);
+  const warn=(days!==null&&days>=30)?`<div class="warn">已超過 ${days} 天未結算</div>`:(!lastT&&lastS)?'<div class="warn">還沒有結算紀錄</div>':'';
+  return `<div class="card" style="margin-bottom:10px"><b>${esc(ch)}</b><span class="tag">寄賣</span><div class="mu" style="margin-top:4px">寄放中：${my.length?my.map(x=>esc(x.product)+' '+x.on+'盒').join('、'):'無'}</div><div class="mu">上次出貨 ${lastS||'—'} · 上次結算 ${lastT||'—'}</div>${warn}</div>`}).join('');
+ const tl=[...D.ship.map(s=>({d:s.date||'',k:'ship',i:D.ship.indexOf(s),h:`<b>出貨</b> ${esc(s.channel)} ${esc(s.product)} ${N(s.qty)}盒<div class="mu">${esc(s.date||'')} · 運費 ${nt(s.fare)}${N(s.other)?' · 其他 '+nt(s.other):''}</div>`})),
+  ...D.settle.map(s=>({d:s.date||'',k:'settle',i:D.settle.indexOf(s),h:`<b>結算</b> ${esc(s.channel)} ${esc(s.product)} 售出 ${N(s.sold)}${N(s.returned)?' · 退回 '+N(s.returned):''}${N(s.lost)?' · 耗損 '+N(s.lost):''}<div class="mu">${esc(s.date||'')} · 實收 ${nt(recvOf(s))}${s.paidDate?' · 入帳 '+esc(s.paidDate):' · 待入帳'}</div>`}))].sort((a,b)=>b.d.localeCompare(a.d));
+ setList(cards+'<div class="grp">時間軸</div>'+(tl.map(x=>`<div class="row" data-k="${x.k}" data-i="${x.i}">${x.h}</div>`).join('')||'<div class="mu">尚無寄售紀錄</div>'));
+}
+function renderConsignMonthly(){
+ const c=ctx(),months=consignMonths(c),card=$('#mcard');
+ card.hidden=!months.length;if(!months.length)return;
+ let sel=MS.consign;if(sel&&!months.some(m=>m.k===sel)){sel=null;MS.consign=null}
+ const cur=sel?months.find(m=>m.k===sel):null,ms=cur?[cur]:months;
+ const G=sum(ms,m=>m.gross),RV=sum(ms,m=>m.recv),Cg=sum(ms,m=>m.cogs),Ls=sum(ms,m=>m.loss),Fe=sum(ms,m=>m.fees),Nt=RV-Cg-Ls-Fe;
+ $('#mlab').textContent=cur?cur.k:'全部月份';
+ $('#mt').textContent='每月寄售淨利（點長條或按 ◀ ▶ 切換，依結算月；運費依出貨月）';
+ $('#mstats').innerHTML=[['售出金額',nt(G)],['抽成',nt(G-RV)],['商品成本',nt(Cg)],['耗損',nt(Ls)],['運費其他',nt(Fe)],['淨利',nt(Nt)],['成本占比',G?Math.round((Cg+Ls+Fe)/G*100)+'%':'—']]
+  .map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('');
+ $('#mbars').innerHTML=bars(months.map(m=>({l:m.k.slice(2),k:m.k,on:m.k===sel,v:mNet(m),t:nt(mNet(m))})));
+ DET.month={t:(cur?cur.k:'全部月份')+' 寄售明細',sum:nt(Nt)+' 淨利',items:ms.flatMap(m=>m.settles.map(s=>conItem(s,'settle')).concat(m.ships.map(s=>conItem(s,'ship'))))};
+}
+function renderConsignGroups(){
+ const g=agg(D.settle,s=>s.channel||'未填',gross);
+ $('#c2t').textContent='各寄賣店售出金額';
+ $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2c').hidden=false;
+}
+function renderStock(c){
+ const S=stockOf(c);
+ const H=sum(S,x=>Math.max(0,x.hand)),O=sum(S,x=>x.on),MADE=sum(D.stock,x=>N(x.qty));
+ setStats([['入庫總盒數',MADE],['手上現貨',H],['寄放中',O],['直營售出',sum(S,x=>x.direct)],['寄售售出',sum(S,x=>x.sold)],['耗損',sum(S,x=>x.lost)]]);
+ $('#lt').textContent='入庫紀錄（點一筆可修改）';
+ const per=S.map(x=>`<div class="ln">${esc(x.name)}：入庫 ${x.made}・手上 ${x.hand}・寄放 ${x.on}</div>`).join('');
+ setList(`<div class="card" style="margin-bottom:12px"><b>各商品現況</b>${per||'<div class="mu">尚無入庫</div>'}</div>`
+  +D.stock.slice().sort(byKey('date')).map(s=>`<div class="row" data-k="stock" data-i="${D.stock.indexOf(s)}"><b>${esc(s.batch||'')}</b><span class="tag">${esc(s.product||'')}</span><div class="mu">${esc(s.date||'')} · ${N(s.qty)} 盒 · 每盒成本 ${nc(s.unitCost)}${s.note?' · '+esc(s.note):''}</div></div>`).join(''));
+}
+function renderProd(c){
+ const ds=c.ds.slice().sort((a,b)=>((a.p.cat1||'~')+(a.p.cat2||'')).localeCompare((b.p.cat1||'~')+(b.p.cat2||'')));
+ const withP=ds.filter(d=>N(d.p.price)&&d.t&&d.p.cat1==='線香');
+ const avg=withP.length?Math.round(sum(withP,d=>(N(d.p.price)-d.t)/N(d.p.price))/withP.length*100)+'%':'—';
+ setStats([['商品數',ds.length],['平均毛利率（一般定價）',avg],['缺進貨價的材料',ds.filter(d=>d.miss.length).length]]);
+ $('#lt').textContent='商品（點一筆可編輯；代號用於入庫批次編號）';
+ const codes=D.prod.filter(p=>p.code).map(p=>esc(p.name)+' '+esc(p.code)).join('　');
+ setList(`<div class="card" style="margin-bottom:12px"><b>代號對照表（貼紙）</b><div class="mu" style="margin-top:4px">${codes||'尚未設定代號'}</div></div>`+ds.map(d=>{
+  const p=d.p,pr=N(p.price),g=pr&&d.t?Math.round((pr-d.t)/pr*100)+'%':'—';
+  const lines=D.chan.map(ch=>{const q=priceFor(d,ch.name);if(!q||!d.t)return'';const cm=N(ch.commission),nn=q*(1-cm/100),gp=nn-d.t;
+   return `<div class="ln">${esc(ch.name)}${cm?'（抽 '+cm+'%）':''}：售價 ${nt(q)} → 到手 ${nc(nn)} → 毛利 ${nc(gp)}（${Math.round(gp/q*100)}%）</div>`}).join('');
+  const costLine=(d.ingL.length||d.packL.length)?`<div class="mu">${p.aliases?'別名：'+esc(p.aliases)+' · ':''}粉材 ${nc(d.pw)} + 包材 ${nc(d.pk)} ＝ 每盒 ${nc(d.t)}${pr?' · 定價 '+nt(pr)+'（毛利 '+g+'）':''}</div>`:(p.aliases?`<div class="mu">別名：${esc(p.aliases)}</div>`:'');
+  return `<div class="row" data-k="prod" data-i="${D.prod.indexOf(p)}"><b>${esc(p.name)}</b>${p.code?'<span class="tag">代號 '+esc(p.code)+'</span>':''}${p.cat1?`<span class="tag">${esc(p.cat1)}${p.cat2?' › '+esc(p.cat2):''}</span>`:''}${costLine}${d.empty&&p.cat1==='線香'?'<div class="warn">尚未填配方，成本是 0</div>':''}${d.miss.length?`<div class="warn">沒有進貨價的材料：${esc(d.miss.join('、'))}</div>`:''}${lines}</div>`}).join(''));
+ const cd=ds.filter(d=>d.t&&d.p.cat1==='線香');
+ $('#c2t').textContent='每盒成本（粉材＋包材）';
+ $('#c2').innerHTML=bars(cd.map(d=>({l:d.p.name.slice(0,6),v:d.t,t:nc(d.t)})));
+ $('#c2c').hidden=false;
+ $('#c3t').textContent='毛利率（一般定價）';
+ $('#c3').innerHTML=bars(withP.map(d=>{const g=(N(d.p.price)-d.t)/N(d.p.price)*100;return {l:d.p.name.slice(0,6),v:g,t:Math.round(g)+'%'}}));
+ $('#c3c').hidden=false;
+ const q={};D.sales.filter(real).forEach(s=>(s.items||[]).forEach(i=>{const n=canon(c,i.name);q[n]=(q[n]||0)+N(i.qty||1)}));
+ const items=ds.filter(d=>d.p.cat1==='線香').map(d=>({name:d.p.name,q:q[d.p.name]||0,tag:(d.p.cat1||'')+(d.p.cat2?' › '+d.p.cat2:'')})).sort((a,b)=>b.q-a.q);
+ const others=Object.keys(q).filter(n=>!c.dd[n]);
+ $('#rank').innerHTML=items.map((x,i)=>`<div class="row" style="cursor:default"><b>${i+1}. ${esc(x.name)}</b>${i<3&&x.q?'<span class="tag">🔥熱銷</span>':''}${!x.q?'<span class="tag">沒賣出</span>':''}<span class="tag">${esc(x.tag)}</span><div class="mu">${x.q} 盒</div></div>`).join('')
+  +(others.length?`<div class="warn" style="margin-top:8px">未建立商品的名稱：${others.map(n=>esc(n)+' '+q[n]+'盒').join('、')}。請到商品頁新增，或把名稱加進既有商品的別名。</div>`:'');
+}
+function renderMats(){
+ const rows=D.mats.slice().sort(byKey('date'));
+ setStats([['進貨筆數',rows.length],['累計進貨金額',nt(sum(rows,m=>N(m.price)))]]);
+ $('#lt').textContent='材料進貨（點一筆可修改）';
+ const g=agg(rows,m=>m.supplier||'未填',m=>N(m.price));
+ $('#c2t').textContent='各供應商進貨金額';
+ $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2c').hidden=false;
+ setList(rows.map(m=>`<div class="row" data-k="mats" data-i="${D.mats.indexOf(m)}"><b>${esc(m.name)}</b><span class="tag">${esc(m.cat||'')}</span><div class="mu">${esc(m.date||'')} · ${N(m.qty)} ${esc(m.unit||'')} · ${nt(m.price)} · ${esc(m.supplier||'')}${N(m.qty)?' · 單價 '+nc(N(m.price)/N(m.qty))+'／'+esc(m.unit||''):''}</div></div>`).join(''));
+}
+function renderChan(){
+ setStats(CTYPES.map(t=>[t,D.chan.filter(c=>c.type===t).length+' 個']));
+ $('#lt').textContent='通路（依母分類；點子通路可修改抽成與簡稱）';
+ setList(CTYPES.map(t=>{const kids=D.chan.filter(c=>c.type===t);
+  return `<div class="grp">${t}</div>`+(kids.map(c=>`<div class="row" data-k="chan" data-i="${D.chan.indexOf(c)}"><b>${esc(c.name)}</b>${c.alias?'<span class="tag">簡稱 '+esc(c.alias)+'</span>':''}<div class="mu">抽成 ${N(c.commission)}% · ${esc(c.settle||'當場收款')}${c.note?' · '+esc(c.note):''}</div></div>`).join('')||'<div class="mu">尚未新增</div>')}).join(''));
+}
+function renderJrep(){
+ const R=curR(),J=jobsOf(R),P=jobsOf(prevR());
+ const cmp=(a,b)=>b?(a>=b?'↑':'↓')+Math.round(Math.abs(a-b)/Math.abs(b)*100)+'%':'';
+ DET={jrep:{t:R.label+' 入帳明細',sum:nt(J.fee),items:J.rows.map(ji)}};
+ setStats([['期間入帳稿費',nt(J.fee)+' '+cmp(J.fee,P.fee),'jrep'],['件數',J.n],['平均稿費',nt(J.n?J.fee/J.n:0)],['案件支出',nt(J.cost)],['淨額',nt(J.net)],['待收款（目前）',nt(jobsWait())]]);
+ $('#c2t').textContent='各客戶入帳稿費';
+ $('#c2').innerHTML=bars(Object.entries(J.byC).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2c').hidden=false;
+ setList(J.rows.map(r=>`<div class="row" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b><div class="mu">${esc(r.client||'')} · 入帳 ${esc(r.paidDate||'')} · 稿費 ${nt(r.fee)}</div></div>`).join('')||'<div class="mu">本期沒有入帳紀錄</div>');
+ $('#lt').textContent='本期入帳案件';
+}
+function renderSrep(c){
+ const R=curR(),M=metrics(R,c),P=metrics(prevR(),c);
+ const cr=M.gross?Math.round((M.gross-M.net)/M.gross*100)+'%':'—';
+ DET={};
+ setStats([['總售價金額',nt(M.gross)],['總淨利',nt(M.net)],['上期淨利',nt(P.net)],['直營淨利',nt(M.direct.net)],['寄售淨利',nt(M.cons.net)],['成本占售價',cr]]);
+ $('#c2t').textContent='各母通路淨利';
+ $('#c2').innerHTML=bars(Object.entries(M.chs).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2c').hidden=false;
+ const S=stockOf(c),q=Object.entries(M.q).sort((a,b)=>b[1]-a[1]);
+ $('#lt').textContent='本期摘要';
+ setList(`<div class="card"><b>直營</b><div class="mu" style="margin-top:4px">收入 ${nt(M.direct.inc)} · 抽成 ${nt(M.direct.comm)} · 場地交通等 ${nt(M.direct.exp)} · 商品成本 ${nt(M.direct.cogs)} · 淨利 ${nt(M.direct.net)}（${M.direct.n} 場）</div></div>`
+  +`<div class="card"><b>寄售</b><div class="mu" style="margin-top:4px">售價 ${nt(M.cons.gross)} · 實收 ${nt(M.cons.recv)} · 商品成本 ${nt(M.cons.cogs)} · 耗損 ${M.cons.lostQ} 盒（${nt(M.cons.loss)}）· 運費與其他 ${nt(M.cons.fees)} · 淨利 ${nt(M.cons.net)}</div></div>`
+  +`<div class="card"><b>銷量</b><div class="mu" style="margin-top:4px">${q.slice(0,5).map(x=>esc(x[0])+' '+x[1]+'盒').join('、')||'本期無銷售'}</div></div>`
+  +`<div class="card"><b>目前庫存</b><div class="mu" style="margin-top:4px">手上現貨 ${sum(S,x=>Math.max(0,x.hand))} 盒；寄放中 ${sum(S,x=>x.on)} 盒</div></div>`);
+}
+function analysisText(){
+ const c=ctx(),R=curR(),M=metrics(R,c),P=metrics(prevR(),c),J=jobsOf(R),JP=jobsOf(prevR());
+ const pct=(a,b)=>b?Math.round((a-b)/Math.abs(b)*100)+'%':'—';
+ const qs=Object.entries(M.q).sort((a,b)=>b[1]-a[1]);
+ const cold=D.prod.filter(p=>p.cat1==='線香'&&!M.q[p.name]).map(p=>p.name);
+ const S=stockOf(c);
+ return [
+  `【芳巽堂 ${R.label} 經營報表】資料日期 ${today()}`,'',
+  '一、整體',`總售價金額 ${nt(M.gross)}，淨利 ${nt(M.net)}（上期淨利 ${nt(P.net)}，變化 ${pct(M.net,P.net)}）`,'',
+  '二、直營（市集／網路）',`收入 ${nt(M.direct.inc)}、抽成 ${nt(M.direct.comm)}、場地交通等支出 ${nt(M.direct.exp)}、商品成本 ${nt(M.direct.cogs)}，淨利 ${nt(M.direct.net)}，共 ${M.direct.n} 場`,'',
+  '三、寄售（寄賣店）',`售出 ${M.cons.sold} 盒、售價金額 ${nt(M.cons.gross)}、實收 ${nt(M.cons.recv)}、商品成本 ${nt(M.cons.cogs)}、耗損 ${M.cons.lostQ} 盒（成本 ${nt(M.cons.loss)}）、出貨運費與其他 ${nt(M.cons.fees)}，淨利 ${nt(M.cons.net)}`,'',
+  '四、接案',`入帳稿費 ${nt(J.fee)}（${J.n} 件），案件支出 ${nt(J.cost)}，淨額 ${nt(J.net)}；目前待收款 ${nt(jobsWait())}；上期入帳 ${nt(JP.fee)}`,'',
+  '五、母通路淨利',Object.entries(M.chs).map(([k,v])=>k+' '+nt(v)).join('、')||'無','',
+  '六、銷量',`熱銷：${qs.slice(0,3).map(x=>x[0]+' '+x[1]+'盒').join('、')||'無'}`,`本期沒賣出：${cold.join('、')||'無'}`,'',
+  '七、庫存（目前）',`手上現貨 ${sum(S,x=>Math.max(0,x.hand))} 盒；寄放中 ${sum(S,x=>x.on)} 盒`,'',
+  '請根據以上資料分析：1. 本期重點與變化原因 2. 成本結構是否合理，哪些費用偏高 3. 各通路與商品的調整建議 4. 下一期需要留意的事項'
+ ].join('\n');
+}
+
+/* ---------- 月份圖表 ---------- */
+function monthsOf(){
+ const J=tab==='jobs';
+ const rows=J?D.jobs.filter(r=>real(r)&&r.status==='已入帳'):D.sales.filter(real);
+ const m={};
+ rows.forEach(r=>{const k=J?(r.paidDate||''):(r.paidDate||(r.settle==='事後結算'?'':r.date)||'');if(!k)return;const mm=k.slice(0,7);(m[mm]=m[mm]||[]).push(r)});
+ return Object.keys(m).sort().map(k=>({k,rows:m[k]}));
+}
+function monthList(){return tab==='consign'?consignMonths(ctx()):monthsOf()}
+function renderMonthly(){
+ if(tab==='consign')return renderConsignMonthly();
+ const J=tab==='jobs',months=monthsOf(),card=$('#mcard');
+ card.hidden=!months.length;
+ if(!months.length)return;
+ let sel=MS[tab];if(sel&&!months.some(m=>m.k===sel)){sel=null;MS[tab]=null}
+ const cur=sel?months.find(m=>m.k===sel):null,rows=cur?cur.rows:months.flatMap(m=>m.rows);
+ $('#mlab').textContent=cur?cur.k:'全部月份';
+ $('#mt').textContent=J?'每月入帳稿費（點長條或按 ◀ ▶ 切換）':'每月收入（點長條或按 ◀ ▶ 切換）';
+ $('#mstats').innerHTML=(J?[['入帳稿費',nt(sum(rows,r=>N(r.fee)))],['件數',rows.length]]:[['收入',nt(sum(rows,inc))],['淨利',nt(sum(rows,net))],['場次',rows.length]])
+  .map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('');
+ $('#mbars').innerHTML=bars(months.map(m=>{const v=J?sum(m.rows,r=>N(r.fee)):sum(m.rows,inc);return {l:m.k.slice(2),k:m.k,on:m.k===sel,v,t:nt(v)}}));
+ DET.month={t:(cur?cur.k:'全部月份')+' 明細',sum:J?nt(sum(rows,r=>N(r.fee))):nt(sum(rows,net))+' 淨利',items:rows.map(r=>J?ji(r):si(r,inc(r)))};
+}
+function stepMonth(d){const months=monthList();if(!months.length)return;
+ let i=months.findIndex(m=>m.k===MS[tab]);i=i<0?(d>0?-1:months.length):i;
+ i=Math.max(0,Math.min(months.length-1,i+d));MS[tab]=months[i].k;renderMonthly()}
+function renderGroups(){
+ if(tab==='consign')return renderConsignGroups();
+ const J=tab==='jobs',rows=J?D.jobs.filter(real):D.sales.filter(real);
+ const g=agg(rows,r=>J?(r.client||'未填'):(chOf(r.channel).type||'未分類'),r=>J?N(r.fee):inc(r));
+ $('#c2t').textContent=J?'各客戶稿費（含未收款）':'各母通路收入';
+ $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2c').hidden=false;
+}
+
+/* ---------- 明細視窗 ---------- */
+function openDetail(dk){
+ const d=DET[dk];if(!d)return;
+ $('#dbx').innerHTML=`<h2 style="color:var(--tx);font-size:16px">${esc(d.t)}</h2>`
+  +(d.sum!=null?`<div style="font-size:21px;font-weight:700;margin:6px 0 8px;font-variant-numeric:tabular-nums">${d.sum}</div>`:'')
+  +(d.items.length?d.items.map(x=>`<div class="row"${x.k?` data-k="${x.k}" data-i="${x.i}"`:''}><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${esc(x.n)}</b><div class="mu">${esc(x.s||'')}</div></div><b class="rr">${x.a!=null?nt(x.a):''}</b></div></div>`).join(''):'<div class="mu">沒有符合的紀錄</div>')
+  +'<div class="btns"><button class="b p" id="dc">關閉</button></div>';
+ $('#dm').hidden=false;
+}
+
+/* ---------- 備份 CSV ---------- */
+function exportCSV(k){
+ const F=FORMS[k];
+ const head=['ID',...F.f.map(f=>f[1].split('（')[0])];
+ const body=D[k].map(r=>[r.id||'',...F.f.map(f=>f[0]==='items'?itemsToText(r.items):(r[f[0]]??''))]);
+ const q=v=>{const s=String(v??'');return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+ const csv='\uFEFF'+[head,...body].map(row=>row.map(q).join(',')).join('\r\n');
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ a.download='芳巽堂_'+F.sheet+'_'+today()+'.csv';
+ document.body.appendChild(a);a.click();a.remove();
+}
+
+/* ---------- 編輯表單 ---------- */
+const FJ=[['case','案件'],['client','客戶'],['status','狀態','sel',ST],['workDate','工作日','date'],['fee','稿費','num'],['invoiceDate','請款日','date'],['expectedDate','預計入帳日','date'],['paidDate','入帳日','date'],['fare','車資','num'],['meal','餐費','num'],['draft','紀錄狀態','sel',['正式','草稿']],['note','備註']];
+const FS=[['market','場次'],['date','日期','date'],['channel','通路','sel',()=>CHS()],['commission','抽成%','num'],['settle','收款方式','sel',['當場收款','事後結算']],['items','品項（例：幽谷馥3@350 初光1@325）'],['manualIncome','總收入（沒有品項時才填）','num'],['stall','攤位費','num'],['fare','車資','num'],['meal','餐費','num'],['lodging','住宿','num'],['other','雜支','num'],['paidDate','入帳日','date'],['draft','紀錄狀態','sel',['正式','草稿']],['note','備註']];
+const FORMS={
+ jobs:{sheet:'接案',label:'接案紀錄',f:FJ,def:()=>({workDate:today()})},
+ sales:{sheet:'銷售',label:'銷售紀錄',f:FS,def:()=>({date:today(),channel:chNames('市集')[0]||''})},
+ ship:{sheet:'寄售出貨',label:'寄售出貨',f:[['date','出貨日','date'],['channel','寄賣店','sel',()=>chNames('寄賣')],['product','商品'],['qty','數量（盒）','num'],['fare','運費','num'],['other','其他費用','num'],['note','備註']],def:()=>({date:today()})},
+ settle:{sheet:'寄售結算',label:'寄售結算（修改會同步更新銷售紀錄）',f:[['date','結算日','date'],['channel','寄賣店','sel',()=>chNames('寄賣')],['product','商品'],['sold','售出數量','num'],['price','售價（每盒）','num'],['commission','抽成%','num'],['received','實收金額（留空則自動算）','num'],['paidDate','入帳日','date'],['returned','退回數量','num'],['lost','耗損數量','num'],['note','備註']],def:()=>({date:today()})},
+ stock:{sheet:'入庫',label:'入庫紀錄',f:[['product','商品'],['date','入庫日','date'],['batch','批次編號（留空自動產生）'],['qty','盒數','num'],['unitCost','每盒成本（留空用目前成本）','num'],['note','備註']],def:()=>({date:today()})},
+ prod:{sheet:'商品',label:'商品配方與定價',f:[['name','商品名稱（銷售紀錄用這個名稱）'],['code','代號（貼紙用，2 碼，例 JN）'],['aliases','別名／舊稱（用、分隔，例：沉香）'],['cat1','大項目（例：線香）'],['cat2','系列（例：研萃）'],['price','一般定價（每盒）','num'],['yield','整批實際產出盒數（已扣耗損）','num'],['ing','整批粉材（例：沉香粉24 黏粉8）'],['pack','每盒包材（例：壓克力線香盒1）'],['cprices','各通路另訂售價（例：寄賣店350，沒寫就用一般定價）']],def:()=>({})},
+ mats:{sheet:'材料',label:'材料進貨',f:[['name','材料名稱'],['cat','類別','sel',['粉材','包材','其他']],['date','進貨日','date'],['qty','數量（粉材填克數，包材填個數）','num'],['unit','單位（克、個…）'],['price','總價','num'],['supplier','來源'],['note','備註']],def:()=>({date:today(),cat:'粉材'})},
+ chan:{sheet:'通路',label:'子通路',f:[['name','通路全名'],['type','母分類','sel',CTYPES],['alias','簡稱（語音用，例：西門）'],['commission','抽成%（寄賣填 25、30…）','num'],['settle','收款方式','sel',['當場收款','事後結算']],['note','備註']],def:()=>({type:'市集',commission:0,settle:'當場收款',alias:''})}
+};
+function openForm(k,i){
+ const F=FORMS[k],rec=i==null?F.def():D[k][i];ed={k,id:rec.id};
+ $('#mb').innerHTML=`<h2 style="color:var(--tx);font-size:16px">${i==null?'新增':'編輯'}${F.label}</h2>`+F.f.map(([fk,l,t,o])=>{
+  const v=fk==='items'?itemsToText(rec.items):rec[fk];
+  const opts=typeof o==='function'?o():(o||[]);
+  const h=t==='sel'?`<select data-k="${fk}">${opts.concat(v&&!opts.includes(v)?[v]:[]).map(x=>`<option ${x===v?'selected':''}>${esc(x)}</option>`).join('')}</select>`
+   :`<input data-k="${fk}" type="${t==='date'?'date':t==='num'?'number':'text'}" ${t==='num'?'inputmode="decimal" step="any"':''} value="${esc(v??'')}">`;
+  return `<label>${l}</label>${h}`}).join('')
+  +`<div class="btns"><button class="b" id="mc">取消</button>${i==null?'':'<button class="b d" id="mdel">刪除</button>'}<button class="b p" id="ms">儲存</button></div>`;
+ $('#md').hidden=false;
+}
+async function saveForm(){
+ const F=FORMS[ed.k],data={};
+ F.f.forEach(([k,l,t])=>{const v=$(`#mb [data-k="${k}"]`).value;data[k]=t==='num'?(v===''?(k==='received'?'':0):+v):v});
+ try{
+  if(ed.k==='prod'&&data.code){
+   data.code=String(data.code).toUpperCase();
+   if(D.prod.some(p=>p.code===data.code&&p.id!==ed.id)){alert('代號「'+data.code+'」已被使用，請改用第三個字母');return}
+  }
+  if(ed.k==='chan'&&data.alias&&D.chan.some(c=>(c.alias===data.alias||c.name===data.alias)&&c.id!==ed.id)){alert('簡稱「'+data.alias+'」已被使用');return}
+  if(ed.k==='stock'&&!ed.id){
+   if(!data.batch)data.batch=newBatch(data.product,data.date);
+   if(!data.unitCost){const p=ctx().dd[data.product];data.unitCost=p?+p.t.toFixed(2):0}
+  }
+  if(ed.k==='settle'){
+   const old=D.settle.find(x=>x.id===ed.id)||{};
+   let id=ed.id;
+   if(id)await send('寄售結算','update',{id,data});
+   else{const r=await send('寄售結算','add',{data});id=r.id}
+   await syncSale(Object.assign({},old,data,{id}));
+  }
+  else if(ed.id)await send(F.sheet,'update',{id:ed.id,data});
+  else await send(F.sheet,'add',{data});
+  $('#md').hidden=true;await loadAll();
+ }catch(e){$('#msg').textContent='儲存失敗：'+e.message}
+}
+async function delForm(){
+ if(!ed.id||!confirm('確定要刪除這筆嗎？'))return;
+ try{
+  if(ed.k==='settle'){const o=D.settle.find(x=>x.id===ed.id)||{};if(o.saleId){try{await send('銷售','delete',{id:o.saleId})}catch(e){}}}
+  await send(FORMS[ed.k].sheet,'delete',{id:ed.id});$('#md').hidden=true;await loadAll()
+ }catch(e){$('#msg').textContent='刪除失敗：'+e.message}
+}
+
+/* ---------- 事件 ---------- */
+$('#gtabs').onclick=e=>{const g=e.target.dataset.g;if(!g)return;if(groupOf(tab)===g)return;setTab(g==='jobs'?'jobs':'sales')};
+$('#gear').onclick=()=>{if(tab==='set')setTab(cfg.url?'jobs':'set');else setTab('set')};
+$('#subwrap').onclick=e=>{const t=e.target.dataset.t;if(t)setTab(t)};
+$('#add').onclick=()=>{if(NATIVE.includes(tab))$('#inp').focus();else if(FORMS[tab])openForm(tab,null)};
+$('#fadd').onclick=()=>{
+ if(tab==='consign'){const isShip=confirm('確定=新增出貨；取消=新增結算');openForm(isShip?'ship':'settle',null);return}
+ if(FORMS[tab])openForm(tab,null)};
+$('#parse').onclick=()=>{if($('#inp').value.trim())build()};
+$('#pv').onclick=e=>{const id=e.target.id;
+ if(id==='cancel'){pend=[];drawPv()}
+ if(id==='confirm')saveAll(false);
+ if(id==='draft')saveAll(true)};
+$('#list').onclick=e=>{
+ const chip=e.target.closest('[data-st]');
+ if(chip){quickStatus(chip.dataset.id,chip.dataset.st);return}
+ const r=e.target.closest('.row[data-k]');if(r)openForm(r.dataset.k,+r.dataset.i)};
+$('#stats').onclick=e=>{const c=e.target.closest('[data-dk]');if(c)openDetail(c.dataset.dk)};
+$('#mprev').onclick=()=>stepMonth(-1);
+$('#mnext').onclick=()=>stepMonth(1);
+$('#mall').onclick=()=>{MS[tab]=null;renderMonthly()};
+$('#mopen').onclick=()=>openDetail('month');
+$('#mbars').onclick=e=>{const b=e.target.closest('[data-m]');if(b){MS[tab]=b.dataset.m;renderMonthly()}};
+document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{
+ const m=b.dataset.rm;
+ if(m==='quarter'&&RP.m!=='quarter')RP.p=Math.ceil(RP.p/3);
+ if(m==='month'&&RP.m==='quarter')RP.p=(RP.p-1)*3+1;
+ RP.m=m;render()});
+$('#rprev').onclick=()=>{shiftP(RP,-1);render()};
+$('#rnext').onclick=()=>{shiftP(RP,1);render()};
+$('#rnow').onclick=()=>{const d=new Date();RP.y=d.getFullYear();RP.p=RP.m==='quarter'?Math.ceil((d.getMonth()+1)/3):d.getMonth()+1;render()};
+$('#ana').onclick=()=>{$('#anat').value=analysisText();$('#anat').hidden=false;$('#cpy').hidden=false;$('#cpm').textContent=''};
+$('#cpy').onclick=async()=>{try{await navigator.clipboard.writeText($('#anat').value);$('#cpm').textContent='已複製'}catch(e){$('#anat').select();$('#cpm').textContent='請手動全選複製'}};
+$('#dbx').onclick=e=>{const id=e.target.id;if(id==='dc'){$('#dm').hidden=true;return}
+ const r=e.target.closest('.row[data-k]');if(r){$('#dm').hidden=true;openForm(r.dataset.k,+r.dataset.i)}};
+$('#dm').onclick=e=>{if(e.target.id==='dm')$('#dm').hidden=true};
+$('#mb').onclick=e=>{const id=e.target.id;
+ if(id==='mc')$('#md').hidden=true;if(id==='ms')saveForm();if(id==='mdel')delForm()};
+$('#md').onclick=e=>{if(e.target.id==='md')$('#md').hidden=true};
+$('#banner').onerror=()=>{$('#banner').hidden=true};
+document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>exportCSV(b.dataset.x));
+$('#refresh').onclick=loadAll;
+$('#url').value=cfg.url||'';$('#key').value=cfg.key||'';
+$('#save').onclick=()=>{cfg={url:$('#url').value.trim(),key:$('#key').value.trim()};localStorage.setItem('ledgerCfg',JSON.stringify(cfg));$('#smsg').textContent='已儲存（只存在這台裝置）'};
+$('#ping').onclick=async()=>{try{const r=await get('接案');$('#smsg').textContent='連線成功，接案目前 '+r.length+' 筆'}catch(e){$('#smsg').textContent='連線失敗：'+e.message}};
+(()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){$('#mic').hidden=true;return}
+ const rec=new SR();rec.lang='zh-TW';rec.interimResults=false;let on=false,base='';
+ $('#mic').onclick=()=>{if(on){rec.stop();return}base=$('#inp').value;on=true;$('#mic').textContent='聽寫中…（再按結束）';rec.start()};
+ rec.onresult=e=>{const t=[...e.results].map(r=>r[0].transcript).join('');$('#inp').value=base+(base&&!base.endsWith('\n')?'\n':'')+t};
+ rec.onend=()=>{on=false;$('#mic').textContent='🎤 語音'};
+ rec.onerror=()=>{on=false;$('#mic').textContent='🎤 語音';$('#msg').textContent='語音沒有啟動，可以直接打字'};
+})();
+render();loadAll();
+</script></body></html>
