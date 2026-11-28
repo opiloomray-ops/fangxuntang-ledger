@@ -4,8 +4,9 @@
 <title>廢柴男子．接案與製香帳務</title>
 <style>
 :root{--bg:#f6f1e9;--card:#fffdf8;--tx:#2e2820;--mu:#8c8175;--ln:#e7dfd2;--ac:#8a5a2b;--ac2:#c98a2b;--acbg:#f3e9dc;--ok:#4f7a5c;--wa:#c08a2e;--bad:#a9503d;--gray:#8c8175;--sh:0 1px 1px rgba(70,50,25,.04),0 2px 8px rgba(70,50,25,.04);color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#171410;--card:#221e19;--tx:#efe7da;--mu:#a09585;--ln:#383128;--ac:#d4a574;--ac2:#e0aa55;--acbg:#2e261d;--ok:#8fbf9d;--wa:#e0aa55;--bad:#e08a75;--gray:#a09585;--sh:none;color-scheme:dark}}
+@media (prefers-color-scheme:dark){:root{--bg:#171410;--card:#221e19;--tx:#efe7da;--mu:#b0a595;--ln:#3a3229;--ac:#d9ad7c;--ac2:#e6b467;--acbg:#2e261d;--ok:#9fd1ae;--wa:#eab063;--bad:#eb9a86;--gray:#b0a595;--sh:none;color-scheme:dark}}
 body[data-g=jobs]{--ac:#5f7f6a;--ac2:#3f6b52;--acbg:#e8efe9}
+@media (prefers-color-scheme:dark){body[data-g=jobs]{--ac:#9dbfa6;--ac2:#b5d6bf;--acbg:#1f2a23}}
 body[data-g=jobs] .tabs button[data-g=jobs].on{background:#5f7f6a;box-shadow:0 2px 8px rgba(63,107,82,.25)}
 body[data-g=shop] .tabs button[data-g=shop].on{background:#8a5a2b;box-shadow:0 2px 8px rgba(138,90,43,.25)}
 *{box-sizing:border-box}
@@ -51,6 +52,7 @@ label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
 .fbar select{width:auto;min-width:120px}
 .row{position:relative;padding:12px 44px 12px 14px;border-top:1px solid var(--ln);border-left:3px solid var(--ac);cursor:pointer;margin-left:-2px}
 .row:first-child{border-top:0}
+.row.dr{border-left-color:var(--gray);border-left-style:dashed}
 .rowact{position:absolute;right:6px;top:50%;transform:translateY(-50%)}
 .xb{width:30px;height:30px;border-radius:50%;border:1px solid var(--ln);background:var(--card);color:var(--mu);font-size:17px;line-height:1;cursor:pointer;padding:0}
 .xb:hover{color:var(--bad);border-color:var(--bad)}
@@ -61,26 +63,46 @@ label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
 .ln2{font-size:12px;color:var(--mu);margin-top:3px}
 .pv{border:1px dashed var(--ac);border-radius:12px;padding:10px;margin:8px 0;font-size:14px;background:var(--bg)}
 .tag{font-size:11px;border:1px solid var(--ln);border-radius:999px;padding:0 7px;margin-left:5px;color:var(--mu);background:var(--bg)}
-.tag.st-wait{color:var(--gray);border-style:dashed}
 .tag.st-doing{color:var(--gray)}
 .tag.st-done{color:var(--ac2);border-color:var(--ac2)}
 .tag.st-inv{color:var(--ac);border-color:var(--ac)}
-.tag.st-paid{color:var(--ok);border-color:var(--ok);background:rgba(79,122,92,.08)}
+.tag.st-paid{color:var(--ok);border-color:var(--ok);background:rgba(79,122,92,.1)}
 .tag.st-draft{color:var(--mu);border:1px dashed var(--mu)}
+.dot{position:absolute;left:-7px;top:50%;width:7px;height:7px;margin-top:-3px;border-radius:50%;background:var(--gray)}
 .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.lhd{margin:4px 2px 8px}
+.lacts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:10px;position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--card);border:1px solid var(--ln);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:6px;z-index:5;display:flex;flex-direction:column;min-width:140px}
+.menu button{background:none;border:0;text-align:left;padding:9px 12px;border-radius:8px;color:var(--tx);font:inherit;font-size:14px;cursor:pointer}
+.menu button:hover{background:var(--acbg)}
+.ex{margin-top:6px}
+.ex summary{font-size:12px;color:var(--ac);cursor:pointer;list-style:none}
+.ex summary::-webkit-details-marker{display:none}
+.ex pre{font:inherit;font-size:12px;color:var(--mu);white-space:pre-wrap;margin:6px 0 0;background:var(--bg);border-radius:10px;padding:8px 10px}
 .rr{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.br{display:grid;grid-template-columns:70px 1fr 88px;gap:10px;align-items:center;margin:8px 0;padding:3px 6px;border-radius:10px;font-size:13px;cursor:pointer}
+.br{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:4px 10px;align-items:center;margin:9px 0;padding:6px 8px;border-radius:10px;font-size:13px;cursor:pointer}
+.br>span:first-child{grid-column:1/2;grid-row:1;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br>.bv{grid-column:2/3;grid-row:1;text-align:right;font-variant-numeric:tabular-nums}
+.br>.bx{grid-column:1/3;grid-row:2}
 .br.on{background:var(--bg);box-shadow:inset 0 0 0 1px var(--ln)}
-.br.on>span:first-child{font-weight:700;color:var(--tx)}
-.bx{background:var(--ln);border-radius:999px;height:10px;overflow:hidden}
+.bx{background:var(--ln);border-radius:999px;height:8px;overflow:hidden}
 .bx i{display:block;height:100%;border-radius:999px;transition:width .3s}
-.bv{text-align:right;font-variant-numeric:tabular-nums;color:var(--tx)}
+.bv{font-variant-numeric:tabular-nums;color:var(--tx)}
+.codes{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.code{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 12px 10px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.code::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac)}
+.code .cc{font-size:26px;font-weight:700;letter-spacing:.08em;color:var(--ac);font-variant-numeric:tabular-nums;line-height:1.1}
+.code .cn{font-size:14px;font-weight:600;margin-top:6px}
+.code .cs{font-size:11px;color:var(--mu);margin-top:2px}
+.code.none{border-style:dashed;opacity:.6}
+.code.none .cc{color:var(--mu);font-size:15px;letter-spacing:0}
+.tl-pg{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0 4px}
 #md,#dm{position:fixed;inset:0;background:rgba(40,30,20,.45);display:flex;align-items:flex-end;justify-content:center;z-index:9}
 #dm{z-index:10}
 #mb,#dbx{background:var(--card);width:100%;max-width:560px;max-height:90%;overflow:auto;border-radius:20px 20px 0 0;padding:16px calc(16px + env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.15)}
 </style></head>
 <body><main>
-<div class="head"><h1>廢柴男子．接案與製香帳務</h1><button id="gear" title="設定">⚙</button></div>
+<div class="head"><h1>廢柴男子．接案與製香帳務</h1><div style="display:flex;gap:8px"><button id="refresh" class="b" title="重新讀取">↻</button><button id="gear" title="設定">⚙</button></div></div>
 <div class="tabs" id="gtabs"><button data-g="jobs">廢柴男子接案工作室</button><button data-g="shop">芳巽堂</button></div>
 <div class="subwrap" id="subwrap" hidden></div>
 
@@ -105,6 +127,7 @@ label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
  <div class="card" id="entry">
   <textarea id="inp" rows="3"></textarea>
   <div class="btns"><button class="b" id="mic">🎤 語音</button><button class="b p" id="parse">整理</button><button class="b" id="fadd">用表單新增</button></div>
+  <details class="ex"><summary>查看輸入範例</summary><pre id="hintbox"></pre></details>
   <div id="pv"></div>
  </div>
  <div class="card" id="repc" hidden>
@@ -124,13 +147,20 @@ label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
  <div class="card" id="c2c" hidden><h2 id="c2t"></h2><div id="c2" style="margin-top:8px"></div></div>
  <div class="card" id="c3c" hidden><h2 id="c3t"></h2><div id="c3" style="margin-top:8px"></div></div>
  <div class="card">
-  <div class="hd"><h2 id="lt">紀錄</h2><span class="btns" style="margin:0">
-   <button class="b" id="bm">批量管理</button><button class="b" id="add">＋新增</button>
+  <div class="hd lhd"><h2 id="lt">紀錄</h2></div>
+  <div class="lacts">
    <button class="b" id="fship" hidden>＋出貨</button><button class="b" id="fsettle" hidden>＋結算</button>
-   <button class="b" id="refresh">重新讀取</button></span></div>
+   <button class="b" id="add">＋新增</button>
+   <button class="b" id="more">⋯</button>
+   <div class="menu" id="menu" hidden>
+    <button id="bm">批量管理</button>
+    <button id="mrefresh">重新讀取</button>
+   </div>
+  </div>
   <div class="fbar"><input id="qs" placeholder="搜尋名稱、客戶、通路…"><select id="mfl"></select></div>
   <div class="bbar" id="bbar" hidden><span id="bcnt">已選 0 筆</span><span class="btns" style="margin:0"><button class="b" id="bsel">全選</button><button class="b" id="bclr">清除</button><button class="b d" id="bdel">刪除所選</button><button class="b" id="bend">結束</button></span></div>
   <div id="list"></div>
+  <div class="tl-pg" id="tlpg" hidden></div>
   <div id="msg" class="mu"></div>
  </div>
  <div class="card" id="rankc" hidden><h2>銷量排行（依全部非草稿銷售，從熱門到冷門）</h2><div id="rank" style="margin-top:8px"></div></div>
@@ -152,8 +182,8 @@ const dim=(y,m)=>pad(new Date(y,m,0).getDate());
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
 const ST=['進行中','已完稿','已請款','已入帳'];
 const CTYPES=['市集','網路','寄賣','其他'];
-const PAL={inc:'#4f7a5c',cost:'#8a5a2b',net:'#c98a2b',loss:'#a9503d',other:'#8c8175'};
-const BARCOL=['#4f7a5c','#8a5a2b','#c98a2b','#a9503d','#8c8175'];
+const BARCOL={inc:'#4f7a5c',cost:'#8a5a2b',net:'#c98a2b',loss:'#a9503d',other:'#8c8175'};
+const BARSEQ=['#4f7a5c','#8a5a2b','#c98a2b','#a9503d','#8c8175'];
 const SHEETS={jobs:'接案',sales:'銷售',prod:'商品',mats:'材料',chan:'通路',ship:'寄售出貨',settle:'寄售結算',stock:'入庫'};
 const NATIVE=['jobs','sales','consign','stock','mats','prod','chan'];
 const GROUPS={
@@ -172,7 +202,7 @@ let cfg=JSON.parse(localStorage.getItem('ledgerCfg')||'{}');
 let D={jobs:[],sales:[],prod:[],mats:[],chan:[],ship:[],settle:[],stock:[]},tab=cfg.url?'jobs':'set',pend=[],ed=null;
 let MS={jobs:null,sales:null,consign:null},DET={};
 let RP={m:'month',y:new Date().getFullYear(),p:new Date().getMonth()+1};
-let BM=false,ERR='',STX=false,QS='',MFL='';
+let BM=false,ERR='',STX=false,QS='',MFL='',TLP=0,TLALL=false;
 const SEL=new Set();
 const CHS=()=>D.chan.map(c=>c.name);
 const resolveCh=t=>D.chan.find(c=>c.name===t)||D.chan.find(c=>c.alias&&c.alias===t)||null;
@@ -554,7 +584,7 @@ function consignMonths(c){
 }
 const mNet=m=>m.recv-m.cogs-m.loss-m.fees;
 
-/* ---------- 報表期間 ---------- */
+/* ---------- 報表期間與去年同期 ---------- */
 function rngOf(m,y,p){
  if(m==='year')return {f:y+'-01-01',t:y+'-12-31',label:y+' 年'};
  if(m==='quarter'){const s=(p-1)*3+1,e=s+2;return {f:y+'-'+pad(s)+'-01',t:y+'-'+pad(e)+'-'+dim(y,e),label:y+' 年 Q'+p+'（'+s+'–'+e+' 月）'}}
@@ -567,6 +597,7 @@ function shiftP(q,d){
  else {const t=q.y*12+q.p-1+d;q.y=Math.floor(t/12);q.p=t%12+1}
 }
 const prevR=()=>{const q=Object.assign({},RP);shiftP(q,-1);return rngOf(q.m,q.y,q.p)};
+const lastYearR=()=>rngOf(RP.m,RP.y-1,RP.p);
 function jobsOf(R){
  const inR=d=>!!d&&d>=R.f&&d<=R.t;
  const jp=D.jobs.filter(j=>real(j)&&j.status==='已入帳'&&inR(j.paidDate));
@@ -593,7 +624,7 @@ function metrics(R,c){
 
 /* ---------- 畫面 ---------- */
 const run=(fn,...a)=>{try{fn(...a)}catch(e){console.error(e);ERR=e.message}};
-function setTab(t){tab=t;pend=[];BM=false;SEL.clear();QS='';MFL='';$('#qs').value='';drawPv();$('#msg').textContent='';render();if(tab!=='set')loadAll()}
+function setTab(t){tab=t;pend=[];BM=false;SEL.clear();QS='';MFL='';TLP=0;TLALL=false;$('#qs').value='';drawPv();$('#msg').textContent='';render();if(tab!=='set')loadAll()}
 function mkOf(k,r){
  const d=k==='settle'?(r.paidDate||''):(k==='ship'||k==='stock')?(r.date||''):(r.paidDate||r.workDate||r.date||'');
  return d.slice(0,7);
@@ -603,6 +634,7 @@ function monthOptions(){
  const s=new Set();ks.forEach(k=>(D[k]||[]).forEach(r=>{const m=mkOf(k,r);if(m)s.add(m)}));
  return [...s].sort().reverse();
 }
+const HINT_KEY=()=>HINT[tab]||'';
 function render(){
  ERR='';
  const g=groupOf(tab);
@@ -620,9 +652,9 @@ function render(){
  if(tab==='set'){if(ERR)$('#msg').textContent='畫面錯誤：'+ERR;return}
  const isRep=tab==='jrep'||tab==='srep',isCon=tab==='consign';
  $('#entry').hidden=!NATIVE.includes(tab);$('#rankc').hidden=tab!=='prod';$('#repc').hidden=!isRep;
- $('#add').hidden=isCon;$('#fship').hidden=!isCon;$('#fsettle').hidden=!isCon;
+ $('#fship').hidden=!isCon;$('#fsettle').hidden=!isCon;$('#add').hidden=isCon;
  $('#c2c').hidden=true;$('#c3c').hidden=true;
- if(NATIVE.includes(tab))$('#inp').placeholder=HINT[tab];
+ if(NATIVE.includes(tab)){$('#inp').placeholder=HINT_KEY().split('\n')[0];$('#hintbox').textContent=HINT_KEY()}
  const opts=monthOptions();
  if(MFL&&!opts.includes(MFL))MFL='';
  $('#mfl').innerHTML='<option value="">全部月份</option>'+opts.map(m=>`<option ${m===MFL?'selected':''}>${m}</option>`).join('');
@@ -649,9 +681,10 @@ function setStats(list){
  $('#stats').innerHTML=shown.map(s=>`<div class="st${s[2]?' clk':''}"${s[2]?` data-dk="${s[2]}"`:''}><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('')+more;
 }
 function setList(html){$('#list').innerHTML=html||'<div class="mu">尚無紀錄</div>';decorate()}
-function bars(list){const mx=Math.max(1,...list.map(x=>Math.abs(x.v)));
- return list.map((x,i)=>{const col=x.v<0?PAL.loss:BARCOL[i%BARCOL.length];
-  return `<div class="br${x.on?' on':''}"${x.k?` data-m="${esc(x.k)}"`:''}><span>${esc(x.l)}</span><div class="bx"><i style="width:${Math.max(2,Math.abs(x.v)/mx*100)}%;background:${col}"></i></div><span class="bv">${x.t}</span></div>`}).join('')||'<div class="mu">尚無資料</div>'}
+function bars(list){
+ const mx=Math.max(1,...list.map(x=>Math.abs(x.v)));
+ return list.map((x,i)=>{const col=x.v<0?BARCOL.loss:BARSEQ[i%BARSEQ.length];
+  return `<div class="br${x.on?' on':''}"${x.k?` data-m="${esc(x.k)}"`:''} title="${esc(x.l)}"><span>${esc(x.l)}</span><span class="bv">${x.t}</span><div class="bx"><i style="width:${Math.max(2,Math.abs(x.v)/mx*100)}%;background:${col}"></i></div></div>`}).join('')||'<div class="mu">尚無資料</div>'}
 function stTag(s){
  const m={'進行中':'st-doing','已完稿':'st-done','已請款':'st-inv','已入帳':'st-paid'};
  return `<span class="tag ${m[s]||''}">${esc(s||'')}</span>`;
@@ -684,14 +717,16 @@ async function delOne(k,i){
 async function delSelected(){
  const keys=[...SEL];
  if(!keys.length){alert('請先勾選要刪除的項目');return}
- const ops=[],skipped=[];
+ const ops=[],skipped=[],names=[];
  keys.forEach(key=>{
   const [k,id]=key.split('|');const r=(D[k]||[]).find(x=>x.id===id);if(!r)return;
   const b=blockMsg(k,r);if(b){skipped.push(labelOf(k,r));return}
+  names.push(labelOf(k,r));
   removeOps(ops,k,r);
  });
  if(!ops.length){alert('沒有可刪除的項目'+(skipped.length?'（自動產生的銷售請到寄售刪除）':''));return}
- if(!confirm('確定刪除所選的 '+keys.length+' 筆？刪除後無法復原。'))return;
+ const preview=names.slice(0,5).map(n=>'・'+n).join('\n')+(names.length>5?'\n…等 '+names.length+' 筆':'');
+ if(!confirm('確定刪除以下 '+names.length+' 筆？刪除後無法復原。\n\n'+preview))return;
  try{await batch(ops);SEL.clear();BM=false;await loadAll();$('#msg').textContent='已刪除'+(skipped.length?'；略過 '+skipped.length+' 筆自動產生的銷售':'')}
  catch(e){$('#msg').textContent='刪除失敗：'+e.message}
 }
@@ -702,13 +737,14 @@ function decorate(){
  $('#bm').textContent=BM?'結束批量':'批量管理';
  document.querySelectorAll('#list .row[data-k]').forEach(r=>{
   const k=r.dataset.k,rec=(D[k]||[])[+r.dataset.i];
-  r.querySelectorAll('.rowact').forEach(x=>x.remove());
+  r.querySelectorAll('.rowact,.dot').forEach(x=>x.remove());
   if(rec&&rec.id){
    const key=k+'|'+rec.id;
    const wrap=document.createElement('div');wrap.className='rowact';
    wrap.innerHTML=BM?`<input type="checkbox" class="ck" data-key="${esc(key)}"${SEL.has(key)?' checked':''}>`:`<button class="xb" data-key="${esc(key)}" title="刪除">×</button>`;
    r.appendChild(wrap);
   }
+  if(rec&&rec.draft==='草稿'){r.classList.add('dr')}else r.classList.remove('dr');
   const okQ=!QS||r.textContent.includes(QS);
   const okM=!MFL||(rec&&mkOf(k,rec)===MFL);
   r.hidden=!(okQ&&okM);
@@ -725,7 +761,7 @@ function renderJobs(){
  $('#lt').textContent='接案紀錄';
  setList(rows.map(r=>{const st=r.status||'進行中';
   const chips=['已完稿','已請款','已入帳'].filter(s=>ST.indexOf(s)>ST.indexOf(st));
-  return `<div class="row" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b>${real(r)?'':'<span class="tag st-draft">草稿</span>'}${stTag(st)}<div class="ln2">${esc(r.client||'')} · 稿費 ${nt(r.fee)}${r.paidDate?' · 入帳 '+esc(r.paidDate):''}</div>${BM?'':chips.map(s=>`<button class="chip" data-id="${esc(r.id)}" data-st="${s}">→ ${s}</button>`).join('')}</div>`}).join(''));
+  return `<div class="row${real(r)?'':' dr'}" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b>${real(r)?'':'<span class="tag st-draft">草稿</span>'}${stTag(st)}<div class="ln2">${esc(r.client||'')} · 稿費 ${nt(r.fee)}${r.paidDate?' · 入帳 '+esc(r.paidDate):''}</div>${BM?'':chips.map(s=>`<button class="chip" data-id="${esc(r.id)}" data-st="${s}">→ ${s}</button>`).join('')}</div>`}).join(''));
 }
 async function quickStatus(id,st){
  const r=D.jobs.find(x=>x.id===id);if(!r)return;
@@ -741,7 +777,7 @@ function renderSales(c){
  DET={inc:{t:'收入明細',sum:nt(I),items:r0.map(r=>si(r,inc(r)))},net:{t:'淨利明細',sum:nt(NT),items:r0.map(r=>si(r,net(r)))},cost:{t:'商品成本明細',sum:nt(CG),items:r0.filter(r=>cogs(r,c)>0).map(r=>si(r,cogs(r)))},after:{t:'扣成本後明細',sum:nt(NT-CG),items:r0.map(r=>si(r,net(r)-cogs(r)))},pend:{t:'待結算明細',sum:nt(PD),items:pendR.map(r=>si(r,inc(r)-comm(r)))},cnt:{t:'場次明細',sum:r0.length+' 場',items:r0.map(r=>si(r,inc(r)))}};
  setStats([['收入',nt(I),'inc'],['淨利',nt(NT),'net'],['商品成本',nt(CG),'cost'],['扣成本後',nt(NT-CG),'after'],['待結算',nt(PD),'pend'],['場次',r0.length,'cnt']]);
  $('#lt').textContent='銷售紀錄';
- setList(rows.map(r=>{const g=cogs(r,c);return `<div class="row" data-k="sales" data-i="${D.sales.indexOf(r)}"><b>${esc(r.market)}</b>${real(r)?'':'<span class="tag st-draft">草稿</span>'}<span class="tag">${esc(r.channel||'')}</span><div class="ln2">${esc(r.date||'')} · 收入 ${nt(inc(r))} · 淨利 ${nt(net(r))}${g?' · 成本 '+nt(g):''}${(r.items||[]).length?' · '+r.items.map(i=>esc(canon(c,i.name))+'×'+i.qty).join('、'):''}</div></div>`}).join(''));
+ setList(rows.map(r=>{const g=cogs(r,c);return `<div class="row${real(r)?'':' dr'}" data-k="sales" data-i="${D.sales.indexOf(r)}"><b>${esc(r.market)}</b>${real(r)?'':'<span class="tag st-draft">草稿</span>'}<span class="tag">${esc(r.channel||'')}</span><div class="ln2">${esc(r.date||'')} · 收入 ${nt(inc(r))} · 淨利 ${nt(net(r))}${g?' · 成本 '+nt(g):''}${(r.items||[]).length?' · '+r.items.map(i=>esc(canon(c,i.name))+'×'+i.qty).join('、'):''}</div></div>`}).join(''));
 }
 function renderConsign(c){
  c=c||ctx();
@@ -755,7 +791,7 @@ function renderConsign(c){
   paid:{t:'已入帳售出明細',sum:nt(G),items:paidS.map(s=>conItem(s,'settle'))},
   pend:{t:'待入帳明細',sum:nt(PW),items:pendS.map(s=>conItem(s,'settle'))},
   fees:{t:'出貨費用明細',sum:nt(FE),items:D.ship.filter(s=>s.date).map(s=>conItem(s,'ship'))}};
- setStats([['寄放中（盒）',onN,'cstock'],['已入帳售出',nt(G),'paid'],['待入帳',nt(PW),'pend'],['淨利（已入帳）',nt(Nt)],['寄放成本',nt(onV)],['抽成',nt(G-RV)],['出貨費用',nt(FE),'fees'],['退回待上架',RT],['耗損盒數',LN]]);
+ setStats([['已入帳售出',nt(G),'paid'],['待入帳',nt(PW),'pend'],['寄放中（盒）',onN,'cstock'],['淨利（已入帳）',nt(Nt)],['寄放成本',nt(onV)],['抽成',nt(G-RV)],['出貨費用',nt(FE),'fees'],['退回待上架',RT],['耗損盒數',LN]]);
  $('#lt').textContent='寄賣店與時間軸';
  const chans=[...new Set([...D.ship.map(s=>s.channel),...D.settle.map(s=>s.channel)].filter(Boolean))];
  const cards=chans.map(ch=>{
@@ -767,7 +803,14 @@ function renderConsign(c){
   return `<div class="card" style="margin-bottom:10px"><b>${esc(ch)}</b><span class="tag">寄賣</span><div class="ln2" style="margin-top:4px">寄放中：${my.length?my.map(x=>esc(x.product)+' '+x.on+'盒').join('、'):'無'}</div><div class="ln2">上次出貨 ${lastS||'—'} · 上次入帳 ${lastT||'—'}</div>${warn}</div>`}).join('');
  const tl=[...D.ship.map(s=>({d:s.date||'',k:'ship',i:D.ship.indexOf(s),h:`<b>出貨</b> ${esc(s.channel)} ${esc(s.product)} ${N(s.qty)}盒<div class="ln2">${esc(s.date||'')} · 運費 ${nt(s.fare)}${N(s.other)?' · 其他 '+nt(s.other):''}</div>`})),
   ...D.settle.map(s=>({d:s.date||'',k:'settle',i:D.settle.indexOf(s),h:`<b>結算</b> ${esc(s.channel)} ${esc(s.product)} 售出 ${N(s.sold)}${N(s.returned)?' · 退回 '+N(s.returned):''}${N(s.lost)?' · 耗損 '+N(s.lost):''}<div class="ln2">${esc(s.date||'')} · 實收 ${nt(recvOf(s))}${s.paidDate?' · 入帳 '+esc(s.paidDate):' · 待入帳'}</div>`}))].sort((a,b)=>b.d.localeCompare(a.d));
- setList(cards+'<div class="grp">時間軸</div>'+(tl.map(x=>`<div class="row" data-k="${x.k}" data-i="${x.i}">${x.h}</div>`).join('')||'<div class="mu">尚無寄售紀錄</div>'));
+ const PER=20,cutoff=new Date(Date.now()-30*864e5).toISOString().slice(0,10);
+ const shown=TLALL?tl:tl.filter(x=>!x.d||x.d>=cutoff);
+ const pages=Math.max(1,Math.ceil(shown.length/PER));
+ TLP=Math.min(TLP,pages-1);
+ const part=shown.slice(TLP*PER,TLP*PER+PER);
+ $('#tlpg').hidden=!shown.length;
+ $('#tlpg').innerHTML=shown.length?`<button class="b" id="tlprev" ${TLP<=0?'disabled':''}>◀</button><span class="mu">第 ${TLP+1} / ${pages} 頁・${TLALL?'全部':'最近 30 天'}</span><button class="b" id="tlnext" ${TLP>=pages-1?'disabled':''}>▶</button><button class="b" id="tlall">${TLALL?'只看最近 30 天':'看全部'}</button>`:'';
+ setList(cards+'<div class="grp">時間軸</div>'+(part.map(x=>`<div class="row" data-k="${x.k}" data-i="${x.i}">${x.h}</div>`).join('')||'<div class="mu">尚無寄售紀錄</div>'));
 }
 function renderConsignMonthly(){
  const c=ctx(),months=consignMonths(c),card=$('#mcard');
@@ -779,13 +822,13 @@ function renderConsignMonthly(){
  $('#mt').textContent='每月寄售淨利（依入帳月；運費依出貨月）';
  $('#mstats').innerHTML=[['售出金額',nt(G)],['抽成',nt(G-RV)],['商品成本',nt(Cg)],['耗損',nt(Ls)],['運費其他',nt(Fe)],['淨利',nt(Nt)],['成本占比',G?Math.round((Cg+Ls+Fe)/G*100)+'%':'—']]
   .map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('');
- $('#mbars').innerHTML=bars(months.map(m=>({l:m.k.slice(2),k:m.k,on:m.k===sel,v:mNet(m),t:nt(mNet(m))})));
+ $('#mbars').innerHTML=bars(months.map(m=>({l:m.k,k:m.k,on:m.k===sel,v:mNet(m),t:nt(mNet(m))})));
  DET.month={t:(cur?cur.k:'全部月份')+' 寄售明細',sum:nt(Nt)+' 淨利',items:ms.flatMap(m=>m.settles.map(s=>conItem(s,'settle')).concat(m.ships.map(s=>conItem(s,'ship'))))};
 }
 function renderConsignGroups(){
  const g=agg(D.settle.filter(s=>s.paidDate),s=>s.channel||'未填',gross);
  $('#c2t').textContent='各寄賣店已入帳售出金額';
- $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k,v,t:nt(v)})));
  $('#c2c').hidden=false;
 }
 function renderStock(c){
@@ -805,8 +848,11 @@ function renderProd(c){
  const avg=withP.length?Math.round(sum(withP,d=>(N(d.p.price)-d.t)/N(d.p.price))/withP.length*100)+'%':'—';
  setStats([['商品數',ds.length],['平均毛利率（一般定價）',avg],['缺進貨價的材料',ds.filter(d=>d.miss.length).length]]);
  $('#lt').textContent='商品';
- const codes=D.prod.filter(p=>p.code).map(p=>esc(p.name)+' '+esc(p.code)).join('　');
- setList(`<div class="card" style="margin-bottom:12px"><b>代號對照表（貼紙）</b><div class="ln2" style="margin-top:4px">${codes||'尚未設定代號'}</div></div>`+ds.map(d=>{
+ const coded=D.prod.filter(p=>p.code);
+ const codeCards=coded.length
+  ?`<div class="codes">${coded.map(p=>`<div class="code"><div class="cc">${esc(p.code)}</div><div class="cn">${esc(p.name)}</div><div class="cs">${esc([p.cat1,p.cat2].filter(Boolean).join(' › '))}</div></div>`).join('')}</div>`
+  :'<div class="mu">尚未設定代號</div>';
+ setList(`<div class="card" style="margin-bottom:12px"><b>代號</b><div style="margin-top:10px">${codeCards}</div></div>`+ds.map(d=>{
   const p=d.p,pr=N(p.price),g=pr&&d.t?Math.round((pr-d.t)/pr*100)+'%':'—';
   const lines=D.chan.map(ch=>{const q=priceFor(d,ch.name);if(!q||!d.t)return'';const cm=N(ch.commission),nn=q*(1-cm/100),gp=nn-d.t;
    return `<div class="ln2">${esc(ch.name)}${cm?'（抽 '+cm+'%）':''}：售價 ${nt(q)} → 到手 ${nc(nn)} → 毛利 ${nc(gp)}（${Math.round(gp/q*100)}%）</div>`}).join('');
@@ -814,10 +860,10 @@ function renderProd(c){
   return `<div class="row" data-k="prod" data-i="${D.prod.indexOf(p)}"><b>${esc(p.name)}</b>${p.code?'<span class="tag">代號 '+esc(p.code)+'</span>':''}${p.cat1?`<span class="tag">${esc(p.cat1)}${p.cat2?' › '+esc(p.cat2):''}</span>`:''}${costLine}${d.empty?'<div class="warn">尚未填配方，成本是 0</div>':''}${d.miss.length?`<div class="warn">沒有進貨價的材料：${esc(d.miss.join('、'))}</div>`:''}${lines}</div>`}).join(''));
  const cd=ds.filter(d=>d.t);
  $('#c2t').textContent='每盒成本（粉材＋包材）';
- $('#c2').innerHTML=bars(cd.map(d=>({l:d.p.name.slice(0,6),v:d.t,t:nc(d.t)})));
+ $('#c2').innerHTML=bars(cd.map(d=>({l:d.p.name,v:d.t,t:nc(d.t)})));
  $('#c2c').hidden=false;
  $('#c3t').textContent='毛利率（一般定價）';
- $('#c3').innerHTML=bars(withP.map(d=>{const g=(N(d.p.price)-d.t)/N(d.p.price)*100;return {l:d.p.name.slice(0,6),v:g,t:Math.round(g)+'%'}}));
+ $('#c3').innerHTML=bars(withP.map(d=>{const g=(N(d.p.price)-d.t)/N(d.p.price)*100;return {l:d.p.name,v:g,t:Math.round(g)+'%'}}));
  $('#c3c').hidden=false;
  const q={};D.sales.filter(real).forEach(s=>(s.items||[]).forEach(i=>{const n=canon(c,i.name);q[n]=(q[n]||0)+N(i.qty||1)}));
  const items=ds.map(d=>({name:d.p.name,q:q[d.p.name]||0,tag:(d.p.cat1||'')+(d.p.cat2?' › '+d.p.cat2:'')})).sort((a,b)=>b.q-a.q);
@@ -831,7 +877,7 @@ function renderMats(){
  $('#lt').textContent='材料進貨';
  const g=agg(rows,m=>m.supplier||'未填',m=>N(m.price));
  $('#c2t').textContent='各供應商進貨金額';
- $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k,v,t:nt(v)})));
  $('#c2c').hidden=false;
  setList(rows.map(m=>`<div class="row" data-k="mats" data-i="${D.mats.indexOf(m)}"><b>${esc(m.name)}</b><span class="tag">${esc(m.cat||'')}</span><div class="ln2">${esc(m.date||'')} · ${N(m.qty)} ${esc(m.unit||'')} · ${nt(m.price)} · ${esc(m.supplier||'')}${N(m.qty)?' · 單價 '+nc(N(m.price)/N(m.qty))+'／'+esc(m.unit||''):''}</div></div>`).join(''));
 }
@@ -842,24 +888,25 @@ function renderChan(){
   return `<div class="grp">${t}</div>`+(kids.map(c=>`<div class="row" data-k="chan" data-i="${D.chan.indexOf(c)}"><b>${esc(c.name)}</b>${c.alias?'<span class="tag">簡稱 '+esc(c.alias)+'</span>':''}<div class="ln2">抽成 ${N(c.commission)}% · ${esc(c.settle||'當場收款')}${c.note?' · '+esc(c.note):''}</div></div>`).join('')||'<div class="mu">尚未新增</div>')}).join(''));
 }
 function renderJrep(){
- const R=curR(),J=jobsOf(R),P=jobsOf(prevR());
+ const R=curR(),J=jobsOf(R),P=jobsOf(prevR()),LY=jobsOf(lastYearR());
  const cmp=(a,b)=>b?(a>=b?'↑':'↓')+Math.round(Math.abs(a-b)/Math.abs(b)*100)+'%':'';
  DET={jrep:{t:R.label+' 入帳明細',sum:nt(J.fee),items:J.rows.map(ji)}};
- setStats([['期間入帳稿費',nt(J.fee)+' '+cmp(J.fee,P.fee),'jrep'],['件數',J.n],['平均稿費',nt(J.n?J.fee/J.n:0)],['案件支出',nt(J.cost)],['淨額',nt(J.net)],['待收款（目前）',nt(jobsWait())]]);
+ setStats([['期間入帳稿費',nt(J.fee)+' '+cmp(J.fee,P.fee),'jrep'],['去年同期',nt(LY.fee)+' '+cmp(J.fee,LY.fee)],['件數',J.n],['平均稿費',nt(J.n?J.fee/J.n:0)],['案件支出',nt(J.cost)],['淨額',nt(J.net)],['待收款（目前）',nt(jobsWait())]]);
  $('#c2t').textContent='各客戶入帳稿費';
- $('#c2').innerHTML=bars(Object.entries(J.byC).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2').innerHTML=bars(Object.entries(J.byC).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k,v,t:nt(v)})));
  $('#c2c').hidden=false;
  $('#lt').textContent='本期入帳案件';
  setList(J.rows.map(r=>`<div class="row" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b><div class="ln2">${esc(r.client||'')} · 入帳 ${esc(r.paidDate||'')} · 稿費 ${nt(r.fee)}</div></div>`).join('')||'<div class="mu">本期沒有入帳紀錄</div>');
 }
 function renderSrep(c){
  c=c||ctx();
- const R=curR(),M=metrics(R,c),P=metrics(prevR(),c);
+ const R=curR(),M=metrics(R,c),P=metrics(prevR(),c),LY=metrics(lastYearR(),c);
+ const cmp=(a,b)=>b?(a>=b?'↑':'↓')+Math.round(Math.abs(a-b)/Math.abs(b)*100)+'%':'';
  const cr=M.gross?Math.round((M.gross-M.net)/M.gross*100)+'%':'—';
  DET={};
- setStats([['總售價金額',nt(M.gross)],['總淨利',nt(M.net)],['上期淨利',nt(P.net)],['直營淨利',nt(M.direct.net)],['寄售淨利',nt(M.cons.net)],['成本占售價',cr]]);
+ setStats([['總淨利',nt(M.net)+' '+cmp(M.net,P.net)],['總售價金額',nt(M.gross)],['去年同期淨利',nt(LY.net)+' '+cmp(M.net,LY.net)],['直營淨利',nt(M.direct.net)],['寄售淨利',nt(M.cons.net)],['成本占售價',cr]]);
  $('#c2t').textContent='各母通路淨利';
- $('#c2').innerHTML=bars(Object.entries(M.chs).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2').innerHTML=bars(Object.entries(M.chs).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k,v,t:nt(v)})));
  $('#c2c').hidden=false;
  const S=stockOf(c),q=Object.entries(M.q).sort((a,b)=>b[1]-a[1]);
  $('#lt').textContent='本期摘要';
@@ -869,14 +916,14 @@ function renderSrep(c){
   +`<div class="card"><b>目前庫存</b><div class="ln2" style="margin-top:4px">手上現貨 ${sum(S,x=>Math.max(0,x.hand))} 盒；寄放中 ${sum(S,x=>x.on)} 盒</div></div>`);
 }
 function analysisText(){
- const c=ctx(),R=curR(),M=metrics(R,c),P=metrics(prevR(),c),J=jobsOf(R),JP=jobsOf(prevR());
+ const c=ctx(),R=curR(),M=metrics(R,c),P=metrics(prevR(),c),LY=metrics(lastYearR(),c),J=jobsOf(R),JP=jobsOf(prevR());
  const pct=(a,b)=>b?Math.round((a-b)/Math.abs(b)*100)+'%':'—';
  const qs=Object.entries(M.q).sort((a,b)=>b[1]-a[1]);
  const cold=D.prod.filter(p=>!M.q[p.name]).map(p=>p.name);
  const S=stockOf(c);
  return [
   `【芳巽堂 ${R.label} 經營報表】資料日期 ${today()}`,'',
-  '一、整體',`總售價金額 ${nt(M.gross)}，淨利 ${nt(M.net)}（上期淨利 ${nt(P.net)}，變化 ${pct(M.net,P.net)}）`,'',
+  '一、整體',`總售價金額 ${nt(M.gross)}，淨利 ${nt(M.net)}（上期淨利 ${nt(P.net)}，變化 ${pct(M.net,P.net)}；去年同期淨利 ${nt(LY.net)}，變化 ${pct(M.net,LY.net)}）`,'',
   '二、直營（市集／網路）',`收入 ${nt(M.direct.inc)}、抽成 ${nt(M.direct.comm)}、場地交通等支出 ${nt(M.direct.exp)}、商品成本 ${nt(M.direct.cogs)}，淨利 ${nt(M.direct.net)}，共 ${M.direct.n} 場`,'',
   '三、寄售（寄賣店，依入帳日）',`售出 ${M.cons.sold} 盒、售價金額 ${nt(M.cons.gross)}、實收 ${nt(M.cons.recv)}、商品成本 ${nt(M.cons.cogs)}、耗損 ${M.cons.lostQ} 盒（成本 ${nt(M.cons.loss)}）、出貨運費與其他 ${nt(M.cons.fees)}，淨利 ${nt(M.cons.net)}`,'',
   '四、接案',`入帳稿費 ${nt(J.fee)}（${J.n} 件），案件支出 ${nt(J.cost)}，淨額 ${nt(J.net)}；目前待收款 ${nt(jobsWait())}；上期入帳 ${nt(JP.fee)}`,'',
@@ -907,7 +954,7 @@ function renderMonthly(){
  $('#mt').textContent=J?'每月入帳稿費（點長條或按 ◀ ▶ 切換）':'每月收入（點長條或按 ◀ ▶ 切換）';
  $('#mstats').innerHTML=(J?[['入帳稿費',nt(sum(rows,r=>N(r.fee)))],['件數',rows.length]]:[['收入',nt(sum(rows,inc))],['淨利',nt(sum(rows,net))],['場次',rows.length]])
   .map(s=>`<div class="st"><span class="mu">${s[0]}</span><b>${s[1]}</b></div>`).join('');
- $('#mbars').innerHTML=bars(months.map(m=>{const v=J?sum(m.rows,r=>N(r.fee)):sum(m.rows,inc);return {l:m.k.slice(2),k:m.k,on:m.k===sel,v,t:nt(v)}}));
+ $('#mbars').innerHTML=bars(months.map(m=>{const v=J?sum(m.rows,r=>N(r.fee)):sum(m.rows,inc);return {l:m.k,k:m.k,on:m.k===sel,v,t:nt(v)}}));
  DET.month={t:(cur?cur.k:'全部月份')+' 明細',sum:J?nt(sum(rows,r=>N(r.fee))):nt(sum(rows,net))+' 淨利',items:rows.map(r=>J?ji(r):si(r,inc(r)))};
 }
 function stepMonth(d){const months=monthList();if(!months.length)return;
@@ -918,7 +965,7 @@ function renderGroups(){
  const J=tab==='jobs',rows=J?D.jobs.filter(real):D.sales.filter(real);
  const g=agg(rows,r=>J?(r.client||'未填'):(chOf(r.channel).type||'未分類'),r=>J?N(r.fee):inc(r));
  $('#c2t').textContent=J?'各客戶稿費（含未收款）':'各母通路收入';
- $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k.slice(0,6),v,t:nt(v)})));
+ $('#c2').innerHTML=bars(Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({l:k,v,t:nt(v)})));
  $('#c2c').hidden=false;
 }
 
@@ -954,7 +1001,7 @@ const FORMS={
  ship:{sheet:'寄售出貨',label:'寄售出貨',f:[['date','出貨日','date'],['channel','寄賣店','sel',()=>chNames('寄賣')],['product','商品'],['qty','數量（盒）','num'],['fare','運費','num'],['other','其他費用','num'],['note','備註']],def:()=>({date:today()})},
  settle:{sheet:'寄售結算',label:'寄售結算（修改會同步更新對應銷售）',f:[['date','結算日','date'],['channel','寄賣店','sel',()=>chNames('寄賣')],['product','商品'],['sold','售出數量','num'],['price','售價（每盒）','num'],['commission','抽成%','num'],['received','實收金額（留空則自動算）','num'],['paidDate','入帳日（沒有入帳就留空）','date'],['returned','退回數量','num'],['lost','耗損數量','num'],['note','備註']],def:()=>({date:today()})},
  stock:{sheet:'入庫',label:'入庫紀錄',f:[['product','商品'],['date','入庫日','date'],['batch','批次編號（留空自動產生）'],['qty','盒數','num'],['unitCost','每盒成本（留空用目前成本）','num'],['note','備註（期初庫存請寫「期初庫存」）']],def:()=>({date:today()})},
- prod:{sheet:'商品',label:'商品配方與定價',f:[['name','商品名稱（銷售紀錄用這個名稱）'],['code','代號（貼紙用，2 碼，例 JN）'],['aliases','別名／舊稱（用、分隔，例：沉香）'],['cat1','大項目（例：線香）'],['cat2','系列（例：研萃）'],['price','一般定價（每盒）','num'],['yield','整批實際產出盒數（已扣耗損）','num'],['ing','整批粉材（例：沉香粉24 黏粉8）'],['pack','每盒包材（例：壓克力線香盒1）'],['cprices','各通路另訂售價（例：寄賣店350，沒寫就用一般定價）']],def:()=>({})},
+ prod:{sheet:'商品',label:'商品配方與定價',f:[['name','商品名稱（銷售紀錄用這個名稱）'],['code','代號（2 碼，例 JN）'],['aliases','別名／舊稱（用、分隔，例：沉香）'],['cat1','大項目（例：線香）'],['cat2','系列（例：研萃）'],['price','一般定價（每盒）','num'],['yield','整批實際產出盒數（已扣耗損）','num'],['ing','整批粉材（例：沉香粉24 黏粉8）'],['pack','每盒包材（例：壓克力線香盒1）'],['cprices','各通路另訂售價（例：寄賣店350，沒寫就用一般定價）']],def:()=>({})},
  mats:{sheet:'材料',label:'材料進貨',f:[['name','材料名稱'],['cat','類別','sel',['粉材','包材','其他']],['date','進貨日','date'],['qty','數量（粉材填克數，包材填個數）','num'],['unit','單位（克、個…）'],['price','總價','num'],['supplier','來源'],['note','備註']],def:()=>({date:today(),cat:'粉材'})},
  chan:{sheet:'通路',label:'子通路',f:[['name','通路全名'],['type','母分類','sel',CTYPES],['alias','簡稱（語音用，例：西門）'],['commission','抽成%（寄賣填 25、30…）','num'],['settle','收款方式','sel',['當場收款','事後結算']],['note','備註']],def:()=>({type:'市集',commission:0,settle:'當場收款',alias:''})}
 };
@@ -1018,7 +1065,7 @@ async function delForm(){
 $('#gtabs').onclick=e=>{const g=e.target.dataset.g;if(!g)return;if(groupOf(tab)===g)return;setTab(g==='jobs'?'jobs':'sales')};
 $('#gear').onclick=()=>{if(tab==='set')setTab(cfg.url?'jobs':'set');else setTab('set')};
 $('#subwrap').onclick=e=>{const t=e.target.dataset.t;if(t)setTab(t)};
-$('#add').onclick=()=>{if(NATIVE.includes(tab)&&tab!=='consign')$('#inp').focus();else if(FORMS[tab])openForm(tab,null)};
+$('#add').onclick=()=>{if(NATIVE.includes(tab))$('#inp').focus();else if(FORMS[tab])openForm(tab,null)};
 $('#fship').onclick=()=>openForm('ship',null);
 $('#fsettle').onclick=()=>openForm('settle',null);
 $('#fadd').onclick=()=>{if(tab==='consign')return;if(FORMS[tab])openForm(tab,null)};
@@ -1037,9 +1084,16 @@ $('#list').onclick=e=>{
  const r=e.target.closest('.row[data-k]');if(!r)return;
  if(BM){const cb=r.querySelector('.ck');if(cb){cb.checked=!cb.checked;toggleSel(cb.dataset.key,cb.checked)}return}
  openForm(r.dataset.k,+r.dataset.i)};
+$('#tlpg').onclick=e=>{const id=e.target.id;
+ if(id==='tlprev'){TLP--;render()}
+ if(id==='tlnext'){TLP++;render()}
+ if(id==='tlall'){TLALL=!TLALL;TLP=0;render()}};
 $('#qs').oninput=e=>{QS=e.target.value.trim();decorate()};
 $('#mfl').onchange=e=>{MFL=e.target.value;decorate()};
-$('#bm').onclick=()=>{BM=!BM;SEL.clear();render()};
+$('#more').onclick=e=>{e.stopPropagation();$('#menu').hidden=!$('#menu').hidden};
+document.addEventListener('click',e=>{if(!e.target.closest('#more')&&!e.target.closest('#menu'))$('#menu').hidden=true});
+$('#bm').onclick=()=>{BM=!BM;SEL.clear();$('#menu').hidden=true;render()};
+$('#mrefresh').onclick=()=>{$('#menu').hidden=true;loadAll()};
 $('#bsel').onclick=()=>{document.querySelectorAll('#list .ck').forEach(cb=>{cb.checked=true;SEL.add(cb.dataset.key)});$('#bcnt').textContent='已選 '+SEL.size+' 筆'};
 $('#bclr').onclick=()=>{SEL.clear();document.querySelectorAll('#list .ck').forEach(cb=>cb.checked=false);$('#bcnt').textContent='已選 0 筆'};
 $('#bdel').onclick=delSelected;
