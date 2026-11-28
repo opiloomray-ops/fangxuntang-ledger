@@ -3,34 +3,35 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>廢柴男子．接案與製香帳務</title>
 <style>
-:root{--bg:#f7f3ec;--card:#fffdf9;--tx:#2b2620;--mu:#8a8076;--ln:#e6dfd3;--ac:#7a5c3e;--ok:#4f8a5b;--wa:#c98a2b;--bad:#b4533f;--jb:#2f4a6d;--sb:#8a5a2b;--sh:0 1px 2px rgba(60,40,20,.06),0 4px 14px rgba(60,40,20,.05);color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#171411;--card:#221e1a;--tx:#efe8dd;--mu:#a1978b;--ln:#363029;--ac:#d1a877;--ok:#7fc08c;--wa:#e0aa55;--bad:#e08a75;--jb:#8fb0d9;--sb:#d1a877;--sh:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);color-scheme:dark}}
-body[data-g=jobs]{--ac:var(--jb)}
-body[data-g=shop]{--ac:var(--sb)}
+:root{--bg:#f6f1e9;--card:#fffdf8;--tx:#2e2820;--mu:#8c8175;--ln:#e7dfd2;--ac:#8a5a2b;--ac2:#c98a2b;--acbg:#f3e9dc;--ok:#4f7a5c;--wa:#c08a2e;--bad:#a9503d;--gray:#8c8175;--sh:0 1px 1px rgba(70,50,25,.04),0 2px 8px rgba(70,50,25,.04);color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#171410;--card:#221e19;--tx:#efe7da;--mu:#a09585;--ln:#383128;--ac:#d4a574;--ac2:#e0aa55;--acbg:#2e261d;--ok:#8fbf9d;--wa:#e0aa55;--bad:#e08a75;--gray:#a09585;--sh:none;color-scheme:dark}}
+body[data-g=jobs]{--ac:#5f7f6a;--ac2:#3f6b52;--acbg:#e8efe9}
+body[data-g=jobs] .tabs button[data-g=jobs].on{background:#5f7f6a;box-shadow:0 2px 8px rgba(63,107,82,.25)}
+body[data-g=shop] .tabs button[data-g=shop].on{background:#8a5a2b;box-shadow:0 2px 8px rgba(138,90,43,.25)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 -apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 main{max-width:760px;margin:0 auto;padding:14px 14px 28px}
 .head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 2px 12px}
-h1{font-size:19px;margin:0;letter-spacing:.02em}
-h2{font-size:14px;color:var(--mu);font-weight:500;margin:0}
-#gear{font-size:19px;background:var(--card);border:1px solid var(--ln);color:var(--mu);width:38px;height:38px;border-radius:12px;cursor:pointer;box-shadow:var(--sh);display:flex;align-items:center;justify-content:center}
+h1{font-size:19px;margin:0;letter-spacing:.03em;font-weight:700}
+h2{font-size:13px;color:var(--mu);font-weight:600;margin:0;letter-spacing:.02em}
+#gear{font-size:18px;background:var(--card);border:1px solid var(--ln);color:var(--mu);width:38px;height:38px;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 #gear.on{color:var(--ac);border-color:var(--ac)}
-#banner{display:block;width:100%;aspect-ratio:3/1;object-fit:cover;border-radius:16px;margin-bottom:10px;box-shadow:var(--sh)}
-.ctitle{font-size:13px;color:var(--ac);font-weight:700;letter-spacing:.06em;margin:0 2px 10px}
+#banner{display:block;width:100%;aspect-ratio:3/1;object-fit:cover;border-radius:16px;margin-bottom:10px}
+.ctitle{font-size:12px;color:var(--ac);font-weight:700;letter-spacing:.08em;margin:0 2px 10px}
 .card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--sh)}
-.tabs{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--ln);border-radius:16px;margin-bottom:10px;box-shadow:var(--sh)}
+.tabs{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--ln);border-radius:16px;margin-bottom:10px}
 .tabs button{flex:1 1 0;padding:10px 6px;border-radius:12px;border:0;background:none;color:var(--mu);font:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s,color .15s}
-.tabs button[data-g=jobs].on{background:var(--jb);color:#fff;box-shadow:0 2px 8px rgba(47,74,109,.35)}
-.tabs button[data-g=shop].on{background:var(--sb);color:#fff;box-shadow:0 2px 8px rgba(138,90,43,.35)}
+.tabs button[data-g=jobs].on{background:#5f7f6a;color:#fff}
+.tabs button[data-g=shop].on{background:#8a5a2b;color:#fff}
 .subwrap{display:flex;align-items:center;gap:6px;margin-bottom:14px;overflow-x:auto;padding:2px 1px 4px;scrollbar-width:none}
 .subwrap::-webkit-scrollbar{display:none}
 .subwrap button{flex:none;padding:7px 14px;border-radius:999px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
-.subwrap button.on{background:var(--ac);border-color:var(--ac);color:var(--bg);font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.12)}
-.sep{flex:none;width:1px;height:22px;background:var(--ln);margin:0 4px}
+.subwrap button.on{background:var(--ac);border-color:var(--ac);color:#fffdf8;font-weight:600}
+.sep{flex:none;width:1px;height:20px;background:var(--ln);margin:0 4px}
 button{font:inherit;cursor:pointer}
-.b{padding:9px 14px;border-radius:12px;border:1px solid var(--ac);background:var(--card);color:var(--ac);font:inherit;cursor:pointer}
-.p{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+.b{padding:8px 14px;border-radius:12px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit;cursor:pointer}
+.p{background:var(--ac);color:#fffdf8;border-color:var(--ac)}
 .d{color:var(--bad);border-color:var(--bad)}
 .chip{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--ac);background:none;color:var(--ac);margin:6px 6px 0 0;font:inherit;cursor:pointer}
 button:disabled{opacity:.5}
@@ -40,15 +41,15 @@ label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
 .mu{color:var(--mu);font-size:13px}
 .warn{color:var(--wa);font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:10px;margin-bottom:12px}
-.st{background:var(--card);border:1px solid var(--ln);border-left:4px solid var(--ac);border-radius:14px;padding:11px 12px;box-shadow:var(--sh)}
+.st{background:var(--card);border:1px solid var(--ln);border-left:3px solid var(--ac);border-radius:14px;padding:11px 12px;box-shadow:var(--sh)}
 .st.clk{cursor:pointer}
-.st .mu{display:block;margin-bottom:2px}
-.st b{display:block;font-size:19px;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.st .mu{display:block;margin-bottom:2px;font-size:12px}
+.st b{display:block;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--tx)}
 .more{grid-column:1/-1;background:none;border:1px dashed var(--ln);border-radius:12px;padding:8px;color:var(--mu);font:inherit;font-size:13px;cursor:pointer}
 .fbar{display:flex;gap:8px;margin:2px 0 8px}
 .fbar input{flex:1}
 .fbar select{width:auto;min-width:120px}
-.row{position:relative;padding:11px 44px 11px 12px;border-top:1px solid var(--ln);border-left:3px solid var(--ac);cursor:pointer;margin-left:-2px}
+.row{position:relative;padding:12px 44px 12px 14px;border-top:1px solid var(--ln);border-left:3px solid var(--ac);cursor:pointer;margin-left:-2px}
 .row:first-child{border-top:0}
 .rowact{position:absolute;right:6px;top:50%;transform:translateY(-50%)}
 .xb{width:30px;height:30px;border-radius:50%;border:1px solid var(--ln);background:var(--card);color:var(--mu);font-size:17px;line-height:1;cursor:pointer;padding:0}
@@ -56,21 +57,27 @@ label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
 .ck{width:20px;height:20px;accent-color:var(--ac);cursor:pointer;margin:0}
 .bbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:8px 10px;margin-bottom:10px}
 .bbar>span:first-child{font-size:14px;font-weight:600;color:var(--ac)}
-.grp{font-size:12px;color:var(--ac);font-weight:700;margin:16px 0 4px 2px;letter-spacing:.08em}
+.grp{font-size:12px;color:var(--ac);font-weight:700;margin:16px 0 4px 2px;letter-spacing:.06em}
 .ln2{font-size:12px;color:var(--mu);margin-top:3px}
 .pv{border:1px dashed var(--ac);border-radius:12px;padding:10px;margin:8px 0;font-size:14px;background:var(--bg)}
 .tag{font-size:11px;border:1px solid var(--ln);border-radius:999px;padding:0 7px;margin-left:5px;color:var(--mu);background:var(--bg)}
+.tag.st-wait{color:var(--gray);border-style:dashed}
+.tag.st-doing{color:var(--gray)}
+.tag.st-done{color:var(--ac2);border-color:var(--ac2)}
+.tag.st-inv{color:var(--ac);border-color:var(--ac)}
+.tag.st-paid{color:var(--ok);border-color:var(--ok);background:rgba(79,122,92,.08)}
+.tag.st-draft{color:var(--mu);border:1px dashed var(--mu)}
 .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
 .rr{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.br{display:grid;grid-template-columns:70px 1fr 88px;gap:10px;align-items:center;margin:7px 0;padding:3px 6px;border-radius:10px;font-size:13px;cursor:pointer}
+.br{display:grid;grid-template-columns:70px 1fr 88px;gap:10px;align-items:center;margin:8px 0;padding:3px 6px;border-radius:10px;font-size:13px;cursor:pointer}
 .br.on{background:var(--bg);box-shadow:inset 0 0 0 1px var(--ln)}
 .br.on>span:first-child{font-weight:700;color:var(--tx)}
-.bx{background:var(--ln);border-radius:999px;height:12px;overflow:hidden}
+.bx{background:var(--ln);border-radius:999px;height:10px;overflow:hidden}
 .bx i{display:block;height:100%;border-radius:999px;transition:width .3s}
 .bv{text-align:right;font-variant-numeric:tabular-nums;color:var(--tx)}
-#md,#dm{position:fixed;inset:0;background:rgba(20,14,8,.5);display:flex;align-items:flex-end;justify-content:center;z-index:9;backdrop-filter:blur(2px)}
+#md,#dm{position:fixed;inset:0;background:rgba(40,30,20,.45);display:flex;align-items:flex-end;justify-content:center;z-index:9}
 #dm{z-index:10}
-#mb,#dbx{background:var(--card);width:100%;max-width:560px;max-height:90%;overflow:auto;border-radius:20px 20px 0 0;padding:16px calc(16px + env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.2)}
+#mb,#dbx{background:var(--card);width:100%;max-width:560px;max-height:90%;overflow:auto;border-radius:20px 20px 0 0;padding:16px calc(16px + env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.15)}
 </style></head>
 <body><main>
 <div class="head"><h1>廢柴男子．接案與製香帳務</h1><button id="gear" title="設定">⚙</button></div>
@@ -136,7 +143,7 @@ label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const N=v=>Number(v)||0;
-const nt=n=>'NT$'+Math.round(N(n)).toLocaleString();
+const nt=n=>'NT$'+Math.round(n||0).toLocaleString();
 const nc=n=>'NT$'+(Math.round(N(n)*10)/10).toLocaleString();
 const sum=(a,f)=>a.reduce((x,r)=>x+f(r),0);
 const agg=(rows,kf,vf)=>{const o={};rows.forEach(r=>{const k=kf(r);o[k]=(o[k]||0)+vf(r)});return o};
@@ -145,7 +152,8 @@ const dim=(y,m)=>pad(new Date(y,m,0).getDate());
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
 const ST=['進行中','已完稿','已請款','已入帳'];
 const CTYPES=['市集','網路','寄賣','其他'];
-const PAL=['#c98a2b','#4f8a5b','#2f4a6d','#b4533f','#7a5c3e','#7a6fa8','#3f8f8f','#c4708a'];
+const PAL={inc:'#4f7a5c',cost:'#8a5a2b',net:'#c98a2b',loss:'#a9503d',other:'#8c8175'};
+const BARCOL=['#4f7a5c','#8a5a2b','#c98a2b','#a9503d','#8c8175'];
 const SHEETS={jobs:'接案',sales:'銷售',prod:'商品',mats:'材料',chan:'通路',ship:'寄售出貨',settle:'寄售結算',stock:'入庫'};
 const NATIVE=['jobs','sales','consign','stock','mats','prod','chan'];
 const GROUPS={
@@ -642,8 +650,12 @@ function setStats(list){
 }
 function setList(html){$('#list').innerHTML=html||'<div class="mu">尚無紀錄</div>';decorate()}
 function bars(list){const mx=Math.max(1,...list.map(x=>Math.abs(x.v)));
- return list.map((x,i)=>{const col=x.v<0?'var(--bad)':PAL[i%PAL.length];
+ return list.map((x,i)=>{const col=x.v<0?PAL.loss:BARCOL[i%BARCOL.length];
   return `<div class="br${x.on?' on':''}"${x.k?` data-m="${esc(x.k)}"`:''}><span>${esc(x.l)}</span><div class="bx"><i style="width:${Math.max(2,Math.abs(x.v)/mx*100)}%;background:${col}"></i></div><span class="bv">${x.t}</span></div>`}).join('')||'<div class="mu">尚無資料</div>'}
+function stTag(s){
+ const m={'進行中':'st-doing','已完稿':'st-done','已請款':'st-inv','已入帳':'st-paid'};
+ return `<span class="tag ${m[s]||''}">${esc(s||'')}</span>`;
+}
 
 /* ---------- 列表：刪除、批量、搜尋與月份篩選 ---------- */
 const labelOf=(k,r)=>{
@@ -713,7 +725,7 @@ function renderJobs(){
  $('#lt').textContent='接案紀錄';
  setList(rows.map(r=>{const st=r.status||'進行中';
   const chips=['已完稿','已請款','已入帳'].filter(s=>ST.indexOf(s)>ST.indexOf(st));
-  return `<div class="row" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<span class="tag">${esc(st)}</span><div class="ln2">${esc(r.client||'')} · 稿費 ${nt(r.fee)}${r.paidDate?' · 入帳 '+esc(r.paidDate):''}</div>${BM?'':chips.map(s=>`<button class="chip" data-id="${esc(r.id)}" data-st="${s}">→ ${s}</button>`).join('')}</div>`}).join(''));
+  return `<div class="row" data-k="jobs" data-i="${D.jobs.indexOf(r)}"><b>${esc(r.case)}</b>${real(r)?'':'<span class="tag st-draft">草稿</span>'}${stTag(st)}<div class="ln2">${esc(r.client||'')} · 稿費 ${nt(r.fee)}${r.paidDate?' · 入帳 '+esc(r.paidDate):''}</div>${BM?'':chips.map(s=>`<button class="chip" data-id="${esc(r.id)}" data-st="${s}">→ ${s}</button>`).join('')}</div>`}).join(''));
 }
 async function quickStatus(id,st){
  const r=D.jobs.find(x=>x.id===id);if(!r)return;
@@ -729,7 +741,7 @@ function renderSales(c){
  DET={inc:{t:'收入明細',sum:nt(I),items:r0.map(r=>si(r,inc(r)))},net:{t:'淨利明細',sum:nt(NT),items:r0.map(r=>si(r,net(r)))},cost:{t:'商品成本明細',sum:nt(CG),items:r0.filter(r=>cogs(r,c)>0).map(r=>si(r,cogs(r)))},after:{t:'扣成本後明細',sum:nt(NT-CG),items:r0.map(r=>si(r,net(r)-cogs(r)))},pend:{t:'待結算明細',sum:nt(PD),items:pendR.map(r=>si(r,inc(r)-comm(r)))},cnt:{t:'場次明細',sum:r0.length+' 場',items:r0.map(r=>si(r,inc(r)))}};
  setStats([['收入',nt(I),'inc'],['淨利',nt(NT),'net'],['商品成本',nt(CG),'cost'],['扣成本後',nt(NT-CG),'after'],['待結算',nt(PD),'pend'],['場次',r0.length,'cnt']]);
  $('#lt').textContent='銷售紀錄';
- setList(rows.map(r=>{const g=cogs(r,c);return `<div class="row" data-k="sales" data-i="${D.sales.indexOf(r)}"><b>${esc(r.market)}</b>${real(r)?'':'<span class="tag">草稿</span>'}<span class="tag">${esc(r.channel||'')}</span><div class="ln2">${esc(r.date||'')} · 收入 ${nt(inc(r))} · 淨利 ${nt(net(r))}${g?' · 成本 '+nt(g):''}${(r.items||[]).length?' · '+r.items.map(i=>esc(canon(c,i.name))+'×'+i.qty).join('、'):''}</div></div>`}).join(''));
+ setList(rows.map(r=>{const g=cogs(r,c);return `<div class="row" data-k="sales" data-i="${D.sales.indexOf(r)}"><b>${esc(r.market)}</b>${real(r)?'':'<span class="tag st-draft">草稿</span>'}<span class="tag">${esc(r.channel||'')}</span><div class="ln2">${esc(r.date||'')} · 收入 ${nt(inc(r))} · 淨利 ${nt(net(r))}${g?' · 成本 '+nt(g):''}${(r.items||[]).length?' · '+r.items.map(i=>esc(canon(c,i.name))+'×'+i.qty).join('、'):''}</div></div>`}).join(''));
 }
 function renderConsign(c){
  c=c||ctx();
@@ -752,7 +764,7 @@ function renderConsign(c){
   const days=lastT?Math.floor((Date.now()-new Date(lastT).getTime())/864e5):null;
   const my=st.filter(x=>x.channel===ch&&x.on>0);
   const warn=(days!==null&&days>=30)?`<div class="warn">已超過 ${days} 天未結算</div>`:(!lastT&&lastS)?'<div class="warn">還沒有已入帳的結算</div>':'';
-  return `<div class="card" style="margin-bottom:10px"><b>${esc(ch)}</b><span class="tag">寄賣</span><div class="mu" style="margin-top:4px">寄放中：${my.length?my.map(x=>esc(x.product)+' '+x.on+'盒').join('、'):'無'}</div><div class="mu">上次出貨 ${lastS||'—'} · 上次入帳 ${lastT||'—'}</div>${warn}</div>`}).join('');
+  return `<div class="card" style="margin-bottom:10px"><b>${esc(ch)}</b><span class="tag">寄賣</span><div class="ln2" style="margin-top:4px">寄放中：${my.length?my.map(x=>esc(x.product)+' '+x.on+'盒').join('、'):'無'}</div><div class="ln2">上次出貨 ${lastS||'—'} · 上次入帳 ${lastT||'—'}</div>${warn}</div>`}).join('');
  const tl=[...D.ship.map(s=>({d:s.date||'',k:'ship',i:D.ship.indexOf(s),h:`<b>出貨</b> ${esc(s.channel)} ${esc(s.product)} ${N(s.qty)}盒<div class="ln2">${esc(s.date||'')} · 運費 ${nt(s.fare)}${N(s.other)?' · 其他 '+nt(s.other):''}</div>`})),
   ...D.settle.map(s=>({d:s.date||'',k:'settle',i:D.settle.indexOf(s),h:`<b>結算</b> ${esc(s.channel)} ${esc(s.product)} 售出 ${N(s.sold)}${N(s.returned)?' · 退回 '+N(s.returned):''}${N(s.lost)?' · 耗損 '+N(s.lost):''}<div class="ln2">${esc(s.date||'')} · 實收 ${nt(recvOf(s))}${s.paidDate?' · 入帳 '+esc(s.paidDate):' · 待入帳'}</div>`}))].sort((a,b)=>b.d.localeCompare(a.d));
  setList(cards+'<div class="grp">時間軸</div>'+(tl.map(x=>`<div class="row" data-k="${x.k}" data-i="${x.i}">${x.h}</div>`).join('')||'<div class="mu">尚無寄售紀錄</div>'));
@@ -794,7 +806,7 @@ function renderProd(c){
  setStats([['商品數',ds.length],['平均毛利率（一般定價）',avg],['缺進貨價的材料',ds.filter(d=>d.miss.length).length]]);
  $('#lt').textContent='商品';
  const codes=D.prod.filter(p=>p.code).map(p=>esc(p.name)+' '+esc(p.code)).join('　');
- setList(`<div class="card" style="margin-bottom:12px"><b>代號對照表（貼紙）</b><div class="mu" style="margin-top:4px">${codes||'尚未設定代號'}</div></div>`+ds.map(d=>{
+ setList(`<div class="card" style="margin-bottom:12px"><b>代號對照表（貼紙）</b><div class="ln2" style="margin-top:4px">${codes||'尚未設定代號'}</div></div>`+ds.map(d=>{
   const p=d.p,pr=N(p.price),g=pr&&d.t?Math.round((pr-d.t)/pr*100)+'%':'—';
   const lines=D.chan.map(ch=>{const q=priceFor(d,ch.name);if(!q||!d.t)return'';const cm=N(ch.commission),nn=q*(1-cm/100),gp=nn-d.t;
    return `<div class="ln2">${esc(ch.name)}${cm?'（抽 '+cm+'%）':''}：售價 ${nt(q)} → 到手 ${nc(nn)} → 毛利 ${nc(gp)}（${Math.round(gp/q*100)}%）</div>`}).join('');
